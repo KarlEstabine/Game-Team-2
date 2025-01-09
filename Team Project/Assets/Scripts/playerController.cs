@@ -3,19 +3,24 @@ using UnityEngine;
 public class playerController : MonoBehaviour
 {
     [SerializeField] CharacterController controller;
+    [SerializeField] LayerMask ignoreMask;
 
     [SerializeField] int jumpMax;
     [SerializeField] int jumpSpeed;
     [SerializeField] int gravity;
+
+    [SerializeField] int shootDamage;
+    [SerializeField] int shootDist;
+
     int jumpCount;
 
     [SerializeField] float moveSpeed;
     [SerializeField] float speedMult;
 
-    bool isSprinting;
-
     Vector3 moveDir;
     Vector3 playerVel;
+
+    bool isSprinting;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -26,6 +31,8 @@ public class playerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.red);
+
         move();
         sprint();
     }
@@ -47,6 +54,11 @@ public class playerController : MonoBehaviour
 
         controller.Move(playerVel * Time.deltaTime);
         playerVel.y -= gravity * Time.deltaTime;
+
+        if (Input.GetButtonDown("Shoot"))
+        {
+            shoot();
+        }
     }
 
     void sprint()
@@ -70,6 +82,21 @@ public class playerController : MonoBehaviour
             jumpCount++;
             playerVel.y = jumpSpeed;
 
+        }
+    }
+
+    void shoot()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreMask))
+        {
+            Debug.Log(hit.collider.name);
+
+            IDamage dmg = hit.collider.GetComponent<IDamage>();
+            if (dmg != null)
+            {
+                dmg.takeDamage(shootDamage);
+            }
         }
     }
 }
