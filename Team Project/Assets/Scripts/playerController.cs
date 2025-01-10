@@ -1,10 +1,11 @@
 using UnityEngine;
 
-public class playerController : MonoBehaviour
+public class playerController : MonoBehaviour, IDamage
 {
     [SerializeField] CharacterController controller;
     [SerializeField] LayerMask ignoreMask;
 
+    [SerializeField] int HP;
     [SerializeField] int jumpMax;
     [SerializeField] int jumpSpeed;
     [SerializeField] int gravity;
@@ -12,6 +13,7 @@ public class playerController : MonoBehaviour
     [SerializeField] int shootDamage;
     [SerializeField] int shootDist;
 
+    int HPOrig;
     int jumpCount;
 
     [SerializeField] float moveSpeed;
@@ -25,7 +27,8 @@ public class playerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        HPOrig = HP;
+        //updatePlayerUI();
     }
 
     // Update is called once per frame
@@ -93,10 +96,23 @@ public class playerController : MonoBehaviour
             Debug.Log(hit.collider.name);
 
             IDamage dmg = hit.collider.GetComponent<IDamage>();
-            if (dmg != null)
+            if (dmg != null && !hit.collider.isTrigger)
             {
                 dmg.takeDamage(shootDamage);
             }
+        }
+    }
+
+    public void takeDamage(int amount)
+    {
+        HP -= amount;
+        //updatePlayerUI();
+        //StartCoroutine(flashDamagePanel());
+
+        if (HP <= 0)
+        {
+            Debug.Log("You Lose");
+            //gameManager.instance.youLose();
         }
     }
 }
