@@ -227,63 +227,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 90469786}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1001 &212552463
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 9.508991
-      objectReference: {fileID: 0}
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.010000953
-      objectReference: {fileID: 0}
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 7.1617346
-      objectReference: {fileID: 0}
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1030706716750036371, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_Name
-      value: Damageable Proximity Mine
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
 --- !u!1 &215212286
 GameObject:
   m_ObjectHideFlags: 0
@@ -965,6 +908,63 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 446168340}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &454632647
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5152509984196573522, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 10.632004
+      objectReference: {fileID: 0}
+    - target: {fileID: 5152509984196573522, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5152509984196573522, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 7.4905634
+      objectReference: {fileID: 0}
+    - target: {fileID: 5152509984196573522, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5152509984196573522, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5152509984196573522, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5152509984196573522, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5152509984196573522, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5152509984196573522, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5152509984196573522, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6174445470508352634, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
+      propertyPath: m_Name
+      value: Damageable Proximity Mine
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
 --- !u!1 &549341055
 GameObject:
   m_ObjectHideFlags: 0
@@ -2173,63 +2173,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5239221815600006160, guid: cef77f1ddd9763349a4c4d100a4396f5, type: 3}
   m_PrefabInstance: {fileID: 6825801954829557499}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &1863547473
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 11.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 6.64
-      objectReference: {fileID: 0}
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1030706716750036371, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
-      propertyPath: m_Name
-      value: Damageable Proximity Mine (1)
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
 --- !u!1 &1988708720
 GameObject:
   m_ObjectHideFlags: 0
@@ -2827,5 +2770,4 @@ SceneRoots:
   - {fileID: 403914340}
   - {fileID: 8133574860869811846}
   - {fileID: 364676867715028823}
-  - {fileID: 212552463}
-  - {fileID: 1863547473}
+  - {fileID: 454632647}
