@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class playerController : MonoBehaviour, IDamage
@@ -34,7 +35,7 @@ public class playerController : MonoBehaviour, IDamage
     {
         anim = GetComponent<Animator>();
         HPOrig = HP;
-        //updatePlayerUI();
+        UpdatePlayerUI();
     }
 
     // Update is called once per frame
@@ -132,14 +133,30 @@ public class playerController : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
-        //updatePlayerUI();
-        //StartCoroutine(flashDamagePanel());
-
+        UpdatePlayerUI();
+        //update health bar to go down if dmg taken
+        StartCoroutine(FlashDamagePanel());
+        //flash dmg panel because we took dmg
         if (HP <= 0)
         {
-            Debug.Log("You Lose");
-            //gameManager.instance.youLose();
+            gameManager.instance.YouLose();
+            //call you lose function in game manager
         }
+    }
+
+    IEnumerator FlashDamagePanel()
+    {
+        gameManager.instance.damagePanel.SetActive(true);
+        //activate damage panel
+        yield return new WaitForSeconds(0.1f);
+        //wait for 0.1 seconds to flash panel
+        gameManager.instance.damagePanel.SetActive(false);
+        //turn dmg panel back off
+    }
+
+    void UpdatePlayerUI()
+    {
+        gameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
     }
 
     void updateAnimator()
