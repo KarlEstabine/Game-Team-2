@@ -8,11 +8,18 @@ public class gameManager : MonoBehaviour
     // UI Elements starting with menuPause and menuActive
     [SerializeField] GameObject menuActive;
     [SerializeField] GameObject menuPause;
+    [SerializeField] GameObject menuWin;
+    [SerializeField] GameObject menuLose;
 
     public GameObject player;
     public playerController playerScript;
 
+    public GameObject damagePanel;
+    public Image playerHPBar;
+
     public bool isPaused;
+
+    int goalCount;
 
     // Changed from start to awake to start before everything else
     void Awake()
@@ -63,5 +70,27 @@ public class gameManager : MonoBehaviour
   
         menuActive.SetActive(false);
         menuActive = null;
+    }
+
+    public void UpdatedGameGoal(int amount)
+    {
+        goalCount += amount;
+        //update goal count/ how many enemies are dead
+
+        // win condition
+        if (goalCount <= 0)
+        {
+            StatePause();
+            menuActive = menuWin;
+            menuActive.SetActive(true);
+        }
+    }
+
+    public void YouLose()
+    {
+        //pause game and display lose menu if player dies
+        StatePause();
+        menuActive = menuLose;
+        menuActive.SetActive(true);
     }
 }
