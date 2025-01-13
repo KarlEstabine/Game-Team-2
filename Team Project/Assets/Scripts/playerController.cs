@@ -5,6 +5,9 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField] CharacterController controller;
     [SerializeField] LayerMask ignoreMask;
 
+    [SerializeField] float groundCheckDistance;     // Distance to check for ground
+    [SerializeField] LayerMask groundMask;          // Layers considered "ground"
+
     [SerializeField] int HP;
     [SerializeField] int jumpMax;
     [SerializeField] int jumpSpeed;
@@ -19,14 +22,17 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField] float moveSpeed;
     [SerializeField] float speedMult;
 
+    bool isSprinting;
+
     Vector3 moveDir;
     Vector3 playerVel;
 
-    bool isSprinting;
+    Animator anim;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        anim = GetComponent<Animator>();
         HPOrig = HP;
         //updatePlayerUI();
     }
@@ -38,26 +44,46 @@ public class playerController : MonoBehaviour, IDamage
 
         move();
         sprint();
+
+        updateAnimator();
     }
 
     void move()
     {
 
-        if (controller.isGrounded)
+        if (IsGrounded())
         {
             jumpCount = 0;
-            playerVel = Vector3.zero;
+
+            // Reset Y velocity only when grounded
+            if (playerVel.y < 0)
+            {
+                playerVel.y = -0.1f; // Slight downward force to ensure grounded state
+            }
+        }
+        else
+        {
+            Debug.Log("Not Grounded");
+            // Apply gravity only when not grounded
+            playerVel.y -= gravity * Time.deltaTime;
         }
 
+        // Get movement input and normalize direction
         moveDir = (Input.GetAxis("Horizontal") * transform.right) +
-                  (Input.GetAxis("Vertical") * transform.forward);
+                  (Input.GetAxis("Vertical") * transform.forward).normalized;
+
+        // Apply movement
         controller.Move(moveDir * moveSpeed * Time.deltaTime);
 
+        // Handle jumping
         jump();
 
-        controller.Move(playerVel * Time.deltaTime);
-        playerVel.y -= gravity * Time.deltaTime;
 
+        //playerVel.y -= gravity * Time.deltaTime;
+        // Apply vertical velocity (gravity or jump)
+        controller.Move(playerVel * Time.deltaTime);
+
+        // Shooting logic
         if (Input.GetButtonDown("Shoot"))
         {
             shoot();
@@ -114,5 +140,42 @@ public class playerController : MonoBehaviour, IDamage
             Debug.Log("You Lose");
             //gameManager.instance.youLose();
         }
+    }
+
+    void updateAnimator()
+    {
+        Vector3 localMoveDir = transform.InverseTransformDirection(moveDir);
+
+        if (moveDir != Vector3.zero)
+        {
+            anim.SetBool("Walking", true);
+
+            // Update MoveX and MoveY based on local direction
+
+            anim.SetFloat("MoveX", localMoveDir.x);
+            anim.SetFloat("MoveY", localMoveDir.z);
+        }
+        else
+        {
+            anim.SetBool("Walking", false);
+        }
+
+        // Update running animation
+        anim.SetBool("Running", isSprinting);
+
+        // Update jumping animation
+        anim.SetBool("Jumping", playerVel.y > 0);
+
+        // Update falling animation
+        anim.SetBool("Falling", playerVel.y < -0.2);
+
+        // Update landing animation
+        anim.SetBool("Landed", IsGrounded());
+    }
+
+    bool IsGrounded()
+    {
+        // Cast a ray down from the character's position
+        return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundMask);
     }
 }
