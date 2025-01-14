@@ -275,6 +275,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 667492657838219207, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
+      propertyPath: m_Radius
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1030706716750036371, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
       propertyPath: m_Name
       value: Damageable Proximity Mine
@@ -2183,7 +2187,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 11.2
+      value: 14.25
       objectReference: {fileID: 0}
     - target: {fileID: 125707273556112482, guid: b1b3f4fe756ce2f4c854ae81aaaaeed8, type: 3}
       propertyPath: m_LocalPosition.y

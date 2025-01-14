@@ -123,6 +123,11 @@ public class playerController : MonoBehaviour, IDamage
             Debug.Log(hit.collider.name);
 
             IDamage dmg = hit.collider.GetComponent<IDamage>();
+            // Manually adding mine since having a collider that is not a trigger on the mine prevents it from working properly
+            if (dmg != null && hit.collider.CompareTag("Damageable Proximity Mine"))
+            {
+                dmg.takeDamage(shootDamage);
+            }
             if (dmg != null && !hit.collider.isTrigger)
             {
                 dmg.takeDamage(shootDamage);
