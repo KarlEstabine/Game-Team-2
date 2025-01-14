@@ -7,52 +7,36 @@ public class ExplodingMine : MonoBehaviour, IDamage
     [SerializeField] float explosionRadius; // Damage radius of the mine
     [SerializeField] int explosionDamage;
 
-    private SphereCollider triggerCollider;  // The trigger collider for detecting players/enemies
-    private bool isTriggered = false;  // Preventing multiple activations
-
-    private void Awake()
-    {
-        // Setup the trigger collider
-        triggerCollider = GetComponent<SphereCollider>();
-    }
+    private bool isActivated = false;  // For preventing multiple activations
 
     private void OnTriggerEnter(Collider other)
     {
         // When a player or enemy enters the trigger radius, the mine activates
-        if (!isTriggered && (other.CompareTag("Player") || other.CompareTag("Enemy")))
+        if (!isActivated && (other.CompareTag("Player") || other.CompareTag("Enemy")))
         {
-            isTriggered = true;  // Prevent multiple activations
-            ActivateMine();
+            // When the mine is stepped on, it takes enough damage to explode
+            takeDamage(HP);
         }
     }
-
-    private void ActivateMine()
-    {
-        // When the mine is stepped on, it takes enough damage to activate
-        takeDamage(HP);
-    }
-
     public void takeDamage(int amount)
     {
         HP -= amount;
         if (HP <= 0)
         {
+            isActivated = true; // The mine has exploded
             Explode();
         }
     }
 
     private void Explode()
     {
-        // Disable the trigger collider to prevent further triggers during the explosion
-        triggerCollider.enabled = false;
-
         // Get all colliders in the explosion radius and apply damage
         Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
         foreach (Collider collider in colliders)
         {
-            // Check if the collider has the IDamage interface and is not a trigger
+            // Check if the collider has the IDamage interface
             IDamage damageable = collider.GetComponent<IDamage>();
-            // Apply explosion damage to anything that is damageable
+            // Apply explosion damage to anything that is damageable and is not a trigger
             if (damageable != null && !collider.isTrigger)
             {
                 damageable.takeDamage(explosionDamage);
@@ -61,9 +45,9 @@ public class ExplodingMine : MonoBehaviour, IDamage
             if (collider.gameObject.CompareTag("Damageable Proximity Mine"))
             {
                 ExplodingMine nearbyMine = collider.GetComponent<ExplodingMine>();
-                if (nearbyMine != null && !nearbyMine.isTriggered)
+                if (nearbyMine != null && !nearbyMine.isActivated)
                 {
-                    nearbyMine.ActivateMine();
+                    nearbyMine.takeDamage(nearbyMine.HP);
                 }
             }
         }

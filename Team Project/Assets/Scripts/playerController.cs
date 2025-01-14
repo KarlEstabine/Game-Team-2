@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class playerController : MonoBehaviour, IDamage
@@ -17,13 +18,21 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField] int shootDamage;
     [SerializeField] int shootDist;
 
+    [SerializeField] int leanAngle;
+    [SerializeField] int leanSpeed;
+
     int HPOrig;
     int jumpCount;
+
+    float currentLean;
 
     [SerializeField] float moveSpeed;
     [SerializeField] float speedMult;
 
     bool isSprinting;
+
+    bool isLeaningRight;
+    bool isLeaningLeft;
 
     Vector3 moveDir;
     Vector3 playerVel;
@@ -47,6 +56,36 @@ public class playerController : MonoBehaviour, IDamage
         sprint();
 
         updateAnimator();
+        handleLean();
+    }
+
+    void handleLean()
+    {
+        if (Input.GetButtonDown("LeanRight"))
+        {
+            isLeaningRight = !isLeaningRight;
+            isLeaningLeft = false;
+        }
+
+        if (Input.GetButtonDown("LeanLeft"))
+        {
+            isLeaningLeft = !isLeaningLeft;
+            isLeaningRight = false;
+        }
+
+        int targetLean = 0;
+
+        if (isLeaningRight)
+        {
+            targetLean = -leanAngle;
+        }
+        else if (isLeaningLeft)
+        {
+            targetLean = leanAngle;
+        }
+
+        currentLean = Mathf.Lerp(currentLean, targetLean, Time.deltaTime * leanSpeed);
+        transform.localRotation = Quaternion.Euler(0, transform.localRotation.eulerAngles.y, currentLean);
     }
 
     void move()
@@ -123,6 +162,11 @@ public class playerController : MonoBehaviour, IDamage
             Debug.Log(hit.collider.name);
 
             IDamage dmg = hit.collider.GetComponent<IDamage>();
+            // Manually adding mine since having a collider that is not a trigger on the mine prevents it from working properly
+            if (dmg != null && hit.collider.CompareTag("Damageable Proximity Mine"))
+            {
+                dmg.takeDamage(shootDamage);
+            }
             if (dmg != null && !hit.collider.isTrigger)
             {
                 dmg.takeDamage(shootDamage);
