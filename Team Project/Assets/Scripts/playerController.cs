@@ -90,32 +90,17 @@ public class playerController : MonoBehaviour, IDamage
 
     void move()
     {
-
-        /*  if (IsGrounded())
-          {
-              jumpCount = 0;
-
-              // Reset Y velocity only when grounded
-              if (playerVel.y < 0)
-              {
-                  playerVel.y = -0.1f; // Slight downward force to ensure grounded state
-              }
-          }
-          else
-          {
-              Debug.Log("Not Grounded");
-              // Apply gravity only when not grounded
-              playerVel.y -= gravity * Time.deltaTime;
-          }*/
         if (controller.isGrounded)
         {
+            
             jumpCount = 0;
             playerVel = Vector3.zero;
 
         }
+        Debug.Log(controller.isGrounded);
         // Get movement input and normalize direction
         moveDir = (Input.GetAxis("Horizontal") * transform.right) +
-                  (Input.GetAxis("Vertical") * transform.forward);
+                  (Input.GetAxis("Vertical") * transform.forward).normalized;
 
         // Apply movement
         controller.Move(moveDir * moveSpeed * Time.deltaTime);
