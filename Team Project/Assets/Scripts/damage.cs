@@ -25,17 +25,39 @@ public class damage : MonoBehaviour
         }
     }
 
+    private void FixedUpdate()
+    {
+        if (type == DamageType.moving)
+        {
+            RaycastHit hit;
+            float travelDistance = speed * Time.fixedDeltaTime;
+
+            // Cast a ray in the direction the bullet is moving
+            if (Physics.Raycast(transform.position, transform.forward, out hit, travelDistance))
+            {
+                OnBulletHit(hit.collider);
+            }
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.isTrigger)
+        OnBulletHit(other);
+    }
+
+    private void OnBulletHit(Collider other)
+    {
+        Debug.Log($"Collided with: {other.name}");
+        if (other.isTrigger || other.CompareTag("Enemy"))
             return;
-            
 
         IDamage dmg = other.GetComponent<IDamage>();
 
         if (dmg != null)
         {
             dmg.takeDamage(damageAmount);
+
+            Debug.Log($"Dealt {damageAmount} to: {other.name}");
         }
 
         if (type == DamageType.moving)

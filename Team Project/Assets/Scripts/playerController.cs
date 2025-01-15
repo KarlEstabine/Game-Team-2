@@ -1,81 +1,69 @@
 using System.Collections;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class playerController : MonoBehaviour, IDamage
 {
+    // Components and References
+    [Header("Components")]
     [SerializeField] CharacterController controller;
     [SerializeField] LayerMask ignoreMask;
+    Animator anim;
 
+    // Ground Detection
+    [Header("Ground Detection")]
     [SerializeField] float groundCheckDistance;     // Distance to check for ground
     [SerializeField] LayerMask groundMask;          // Layers considered "ground"
 
-    [SerializeField] int HP;
+    // Player Stats
+    [Header("Player Stats")]
+    public int HP;
+    public int HPOrig;
     [SerializeField] int jumpMax;
     [SerializeField] int jumpSpeed;
     [SerializeField] int gravity;
-
-    [SerializeField] int shootDamage;
-    [SerializeField] int shootDist;
-
-
-    [SerializeField] int leanAngle;
-    [SerializeField] int leanSpeed;
-
-    [SerializeField] float dashSpeed = 30f;
-    [SerializeField] float dashDuration = 0.2f;
-    [SerializeField] float dashCooldown = 1f;
-
-
-    int HPOrig;
-    int jumpCount;
-
-    float currentLean;
-
     [SerializeField] float moveSpeed;
     [SerializeField] float speedMult;
 
-    bool isSprinting;
-    bool isDashing = false;
+    // Shooting
+    [Header("Shooting")]
+    [SerializeField] int shootDamage;
+    [SerializeField] int shootDist;
 
-    float dashTimeLeft;
-    float dashCooldownTimer;
-
+    // Leaning
+    [Header("Leaning")]
+    [SerializeField] int leanAngle;
+    [SerializeField] int leanSpeed;
+    float currentLean;
     bool isLeaningRight;
     bool isLeaningLeft;
 
+    // State Variables
+    [Header("State Variables")]
+    int jumpCount;
+    bool isSprinting;
     Vector3 moveDir;
     Vector3 playerVel;
-    Vector3 dashDir;
 
-    Animator anim;
-
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         anim = GetComponent<Animator>();
         HPOrig = HP;
-
         UpdatePlayerUI();
-
-
-        
-
     }
 
     // Update is called once per frame
     void Update()
     {
+        Debug.DrawRay(transform.position, Vector3.down * groundCheckDistance, Color.green);
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.red);
 
         move();
         sprint();
-        dashInput();
-
         updateAnimator();
-
         handleLean();
     }
 
@@ -106,9 +94,6 @@ public class playerController : MonoBehaviour, IDamage
 
         currentLean = Mathf.Lerp(currentLean, targetLean, Time.deltaTime * leanSpeed);
         transform.localRotation = Quaternion.Euler(0, transform.localRotation.eulerAngles.y, currentLean);
-
-        UpdateDashCooldown();
-
     }
 
     void move()
@@ -126,7 +111,6 @@ public class playerController : MonoBehaviour, IDamage
         }
         else
         {
-            Debug.Log("Not Grounded");
             // Apply gravity only when not grounded
             playerVel.y -= gravity * Time.deltaTime;
         }
@@ -182,8 +166,6 @@ public class playerController : MonoBehaviour, IDamage
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreMask))
         {
-            Debug.Log(hit.collider.name);
-
             IDamage dmg = hit.collider.GetComponent<IDamage>();
             // Manually adding mine since having a collider that is not a trigger on the mine prevents it from working properly
             if (dmg != null && hit.collider.CompareTag("Damageable Proximity Mine"))
@@ -196,7 +178,7 @@ public class playerController : MonoBehaviour, IDamage
             }
         }
     }
-  
+
     public void takeDamage(int amount)
     {
         HP -= amount;
@@ -260,54 +242,6 @@ public class playerController : MonoBehaviour, IDamage
     bool IsGrounded()
     {
         // Cast a ray down from the character's position
-        return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundMask);
-    }
-    void dashInput()
-    {
-        // Check if the dash button is pressed and all conditions are met
-        if (Input.GetButtonDown("Dash") && dashCooldownTimer <= 0 && !isDashing)
-        {
-            Debug.Log("Dash initiated");
-            StartDash();
-        }
-
-        // Handle the actual dashing movement
-        if (isDashing)
-        {
-            PerformDash();
-        }
-    }
-
-    void StartDash()
-    {
-        isDashing = true;
-        dashTimeLeft = dashDuration;
-        dashCooldownTimer = dashCooldown;
-
-        dashDir = moveDir != Vector3.zero ? moveDir : transform.forward;
-        Debug.Log($"Dash direction: {dashDir}");
-
-
-    }
-    void PerformDash()
-    {
-        if (dashTimeLeft >0)
-            {
-            controller.Move(dashDir * dashSpeed * Time.deltaTime);
-            dashTimeLeft -= Time.deltaTime;
-            
-
-            }
-        else
-        {
-            isDashing = false;
-        }
-     }
-    void UpdateDashCooldown()
-    {
-        if(dashCooldownTimer > 0)
-        {
-            dashCooldownTimer -= Time.deltaTime;
-        }
+        return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundMask, QueryTriggerInteraction.Ignore);
     }
 }
