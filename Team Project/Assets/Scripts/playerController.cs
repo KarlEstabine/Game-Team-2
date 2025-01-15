@@ -91,37 +91,45 @@ public class playerController : MonoBehaviour, IDamage
     void move()
     {
 
-        if (IsGrounded())
+        /*  if (IsGrounded())
+          {
+              jumpCount = 0;
+
+              // Reset Y velocity only when grounded
+              if (playerVel.y < 0)
+              {
+                  playerVel.y = -0.1f; // Slight downward force to ensure grounded state
+              }
+          }
+          else
+          {
+              Debug.Log("Not Grounded");
+              // Apply gravity only when not grounded
+              playerVel.y -= gravity * Time.deltaTime;
+          }*/
+        if (controller.isGrounded)
         {
             jumpCount = 0;
+            playerVel = Vector3.zero;
 
-            // Reset Y velocity only when grounded
-            if (playerVel.y < 0)
-            {
-                playerVel.y = -0.1f; // Slight downward force to ensure grounded state
-            }
         }
-        else
-        {
-            Debug.Log("Not Grounded");
-            // Apply gravity only when not grounded
-            playerVel.y -= gravity * Time.deltaTime;
-        }
-
         // Get movement input and normalize direction
         moveDir = (Input.GetAxis("Horizontal") * transform.right) +
-                  (Input.GetAxis("Vertical") * transform.forward).normalized;
+                  (Input.GetAxis("Vertical") * transform.forward);
 
         // Apply movement
         controller.Move(moveDir * moveSpeed * Time.deltaTime);
-
+        
+        
         // Handle jumping
         jump();
+        
 
-
-        //playerVel.y -= gravity * Time.deltaTime;
-        // Apply vertical velocity (gravity or jump)
         controller.Move(playerVel * Time.deltaTime);
+
+        playerVel.y -= gravity * Time.deltaTime;
+        // Apply vertical velocity (gravity or jump)
+      
 
         // Shooting logic
         if (Input.GetButtonDown("Shoot"))
