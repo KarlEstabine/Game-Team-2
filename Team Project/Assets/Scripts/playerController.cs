@@ -4,40 +4,48 @@ using UnityEngine;
 
 public class playerController : MonoBehaviour, IDamage
 {
+    // Components and References
+    [Header("Components")]
     [SerializeField] CharacterController controller;
     [SerializeField] LayerMask ignoreMask;
+    Animator anim;
 
+    // Ground Detection
+    [Header("Ground Detection")]
     [SerializeField] float groundCheckDistance;     // Distance to check for ground
     [SerializeField] LayerMask groundMask;          // Layers considered "ground"
 
-    [SerializeField] int HP;
+    // Player Stats
+    [Header("Player Stats")]
+    public int HP;
+    public int HPOrig;
     [SerializeField] int jumpMax;
     [SerializeField] int jumpSpeed;
     [SerializeField] int gravity;
-
-    [SerializeField] int shootDamage;
-    [SerializeField] int shootDist;
-
-    [SerializeField] int leanAngle;
-    [SerializeField] int leanSpeed;
-
-    int HPOrig;
-    int jumpCount;
-
-    float currentLean;
-
     [SerializeField] float moveSpeed;
     [SerializeField] float speedMult;
 
-    bool isSprinting;
+    // Shooting
+    [Header("Shooting")]
+    [SerializeField] int shootDamage;
+    [SerializeField] int shootDist;
 
+    // Leaning
+    [Header("Leaning")]
+    [SerializeField] int leanAngle;
+    [SerializeField] int leanSpeed;
+    float currentLean;
     bool isLeaningRight;
     bool isLeaningLeft;
 
+    // State Variables
+    [Header("State Variables")]
+    int jumpCount;
+    bool isSprinting;
     Vector3 moveDir;
     Vector3 playerVel;
 
-    Animator anim;
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -50,11 +58,11 @@ public class playerController : MonoBehaviour, IDamage
     // Update is called once per frame
     void Update()
     {
+        Debug.DrawRay(transform.position, Vector3.down * groundCheckDistance, Color.green);
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.red);
 
         move();
         sprint();
-
         updateAnimator();
         handleLean();
     }
@@ -103,7 +111,6 @@ public class playerController : MonoBehaviour, IDamage
         }
         else
         {
-            Debug.Log("Not Grounded");
             // Apply gravity only when not grounded
             playerVel.y -= gravity * Time.deltaTime;
         }
@@ -159,8 +166,6 @@ public class playerController : MonoBehaviour, IDamage
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreMask))
         {
-            Debug.Log(hit.collider.name);
-
             IDamage dmg = hit.collider.GetComponent<IDamage>();
             // Manually adding mine since having a collider that is not a trigger on the mine prevents it from working properly
             if (dmg != null && hit.collider.CompareTag("Damageable Proximity Mine"))
@@ -237,6 +242,6 @@ public class playerController : MonoBehaviour, IDamage
     bool IsGrounded()
     {
         // Cast a ray down from the character's position
-        return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundMask);
+        return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundMask, QueryTriggerInteraction.Ignore);
     }
 }
