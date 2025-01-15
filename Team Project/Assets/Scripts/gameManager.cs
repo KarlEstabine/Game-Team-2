@@ -11,15 +11,15 @@ public class gameManager : MonoBehaviour
     [SerializeField] GameObject menuWin;
     [SerializeField] GameObject menuLose;
 
-    [HideInInspector] public GameObject player;
-    playerController playerScript;
+    public GameObject player;
+    public playerController playerScript;
 
     public GameObject damagePanel;
     public Image playerHPBar;
 
     public bool isPaused;
 
-    public int goalCount;
+    int goalCount;
 
     // Changed from start to awake to start before everything else
     void Awake()
@@ -32,9 +32,7 @@ public class gameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        playerHPBar.fillAmount = (float)playerScript.HP / playerScript.HPOrig;
-
-        if (Input.GetButtonDown("Cancel"))
+        if(Input.GetButtonDown("Cancel"))
         {
             if (menuActive == null)
             {

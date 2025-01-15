@@ -44,12 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6192751be731ebc4895622393b26e886, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuActive: {fileID: 0}
-  menuPause: {fileID: 757487446177794900, guid: 7f9205da60d6e794aa2cfd46efd0ce76, type: 3}
-  menuWin: {fileID: 0}
-  menuLose: {fileID: 0}
   player: {fileID: 0}
   playerScript: {fileID: 0}
-  damagePanel: {fileID: 0}
-  playerHPBar: {fileID: 0}
-  isPaused: 0
