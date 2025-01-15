@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class playerController : MonoBehaviour, IDamage
 {
@@ -16,6 +17,10 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField] int shootDamage;
     [SerializeField] int shootDist;
 
+    [SerializeField] float dashSpeed = 30f;
+    [SerializeField] float dashDuration = 0.2f;
+    [SerializeField] float dashCooldown = 1f;
+
     int HPOrig;
     int jumpCount;
 
@@ -23,17 +28,25 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField] float speedMult;
 
     bool isSprinting;
+    bool isDashing = false;
+
+    float dashTimeLeft;
+    float dashCooldownTimer;
 
     Vector3 moveDir;
     Vector3 playerVel;
+    Vector3 dashDir;
 
     Animator anim;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         anim = GetComponent<Animator>();
         HPOrig = HP;
+
+        
         //updatePlayerUI();
     }
 
@@ -44,8 +57,10 @@ public class playerController : MonoBehaviour, IDamage
 
         move();
         sprint();
+        dashInput();
 
         updateAnimator();
+        UpdateDashCooldown();
     }
 
     void move()
@@ -128,7 +143,7 @@ public class playerController : MonoBehaviour, IDamage
             }
         }
     }
-
+  
     public void takeDamage(int amount)
     {
         HP -= amount;
@@ -177,5 +192,53 @@ public class playerController : MonoBehaviour, IDamage
     {
         // Cast a ray down from the character's position
         return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundMask);
+    }
+    void dashInput()
+    {
+        // Check if the dash button is pressed and all conditions are met
+        if (Input.GetButtonDown("Dash") && dashCooldownTimer <= 0 && !isDashing)
+        {
+            Debug.Log("Dash initiated");
+            StartDash();
+        }
+
+        // Handle the actual dashing movement
+        if (isDashing)
+        {
+            PerformDash();
+        }
+    }
+
+    void StartDash()
+    {
+        isDashing = true;
+        dashTimeLeft = dashDuration;
+        dashCooldownTimer = dashCooldown;
+
+        dashDir = moveDir != Vector3.zero ? moveDir : transform.forward;
+        Debug.Log($"Dash direction: {dashDir}");
+
+
+    }
+    void PerformDash()
+    {
+        if (dashTimeLeft >0)
+            {
+            controller.Move(dashDir * dashSpeed * Time.deltaTime);
+            dashTimeLeft -= Time.deltaTime;
+            
+
+            }
+        else
+        {
+            isDashing = false;
+        }
+     }
+    void UpdateDashCooldown()
+    {
+        if(dashCooldownTimer > 0)
+        {
+            dashCooldownTimer -= Time.deltaTime;
+        }
     }
 }

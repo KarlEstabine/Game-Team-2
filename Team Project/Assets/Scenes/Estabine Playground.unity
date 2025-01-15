@@ -2506,12 +2506,24 @@ PrefabInstance:
       value: 1.040582
       objectReference: {fileID: 0}
     - target: {fileID: 6521444080051114576, guid: 9abaf01aba40a1b4f8f01cb2a2b8dc75, type: 3}
+      propertyPath: dashSpeed
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6521444080051114576, guid: 9abaf01aba40a1b4f8f01cb2a2b8dc75, type: 3}
       propertyPath: moveSpeed
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6521444080051114576, guid: 9abaf01aba40a1b4f8f01cb2a2b8dc75, type: 3}
       propertyPath: speedMult
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6521444080051114576, guid: 9abaf01aba40a1b4f8f01cb2a2b8dc75, type: 3}
+      propertyPath: dashCooldown
+      value: 1.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 6521444080051114576, guid: 9abaf01aba40a1b4f8f01cb2a2b8dc75, type: 3}
+      propertyPath: dashDuration
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 6521444080051114576, guid: 9abaf01aba40a1b4f8f01cb2a2b8dc75, type: 3}
       propertyPath: groundMask.m_Bits
