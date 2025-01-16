@@ -1,5 +1,7 @@
 using UnityEngine;
+using Unity.Mathematics;
 using UnityEngine.InputSystem;
+using System.Collections;
 
 public class playerController : MonoBehaviour, IDamage
 {
@@ -17,17 +19,26 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField] int shootDamage;
     [SerializeField] int shootDist;
 
-    [SerializeField] float dashSpeed = 30f;
-    [SerializeField] float dashDuration = 0.2f;
-    [SerializeField] float dashCooldown = 1f;
+    [SerializeField] int leanAngle;
+    [SerializeField] int leanSpeed;
+
+    [SerializeField] float dashSpeed;
+    [SerializeField] float dashDuration;
+    [SerializeField] float dashCooldown;
 
     int HPOrig;
     int jumpCount;
+
+    float currentLean;
 
     [SerializeField] float moveSpeed;
     [SerializeField] float speedMult;
 
     bool isSprinting;
+
+    bool isLeaningRight;
+    bool isLeaningLeft;
+
     bool isDashing = false;
 
     float dashTimeLeft;
@@ -35,6 +46,7 @@ public class playerController : MonoBehaviour, IDamage
 
     Vector3 moveDir;
     Vector3 playerVel;
+
     Vector3 dashDir;
 
     Animator anim;
@@ -45,9 +57,7 @@ public class playerController : MonoBehaviour, IDamage
     {
         anim = GetComponent<Animator>();
         HPOrig = HP;
-
-        
-        //updatePlayerUI();
+        UpdatePlayerUI();
     }
 
     // Update is called once per frame
@@ -61,27 +71,48 @@ public class playerController : MonoBehaviour, IDamage
 
         updateAnimator();
         UpdateDashCooldown();
+        handleLean();
+    }
+
+    void handleLean()
+    {
+        if (Input.GetButtonDown("LeanRight"))
+        {
+            isLeaningRight = !isLeaningRight;
+            isLeaningLeft = false;
+        }
+
+        if (Input.GetButtonDown("LeanLeft"))
+        {
+            isLeaningLeft = !isLeaningLeft;
+            isLeaningRight = false;
+        }
+
+        int targetLean = 0;
+
+        if (isLeaningRight)
+        {
+            targetLean = -leanAngle;
+        }
+        else if (isLeaningLeft)
+        {
+            targetLean = leanAngle;
+        }
+
+        currentLean = Mathf.Lerp(currentLean, targetLean, Time.deltaTime * leanSpeed);
+        transform.localRotation = Quaternion.Euler(0, transform.localRotation.eulerAngles.y, currentLean);
     }
 
     void move()
     {
 
-        if (IsGrounded())
+        if (controller.isGrounded)
         {
             jumpCount = 0;
+            playerVel = Vector3.zero;
+        }
 
-            // Reset Y velocity only when grounded
-            if (playerVel.y < 0)
-            {
-                playerVel.y = -0.1f; // Slight downward force to ensure grounded state
-            }
-        }
-        else
-        {
-            Debug.Log("Not Grounded");
-            // Apply gravity only when not grounded
-            playerVel.y -= gravity * Time.deltaTime;
-        }
+        Debug.Log(controller.isGrounded);
 
         // Get movement input and normalize direction
         moveDir = (Input.GetAxis("Horizontal") * transform.right) +
@@ -94,9 +125,9 @@ public class playerController : MonoBehaviour, IDamage
         jump();
 
 
-        //playerVel.y -= gravity * Time.deltaTime;
         // Apply vertical velocity (gravity or jump)
         controller.Move(playerVel * Time.deltaTime);
+        playerVel.y -= gravity * Time.deltaTime;
 
         // Shooting logic
         if (Input.GetButtonDown("Shoot"))
@@ -137,24 +168,50 @@ public class playerController : MonoBehaviour, IDamage
             Debug.Log(hit.collider.name);
 
             IDamage dmg = hit.collider.GetComponent<IDamage>();
+            // Manually adding mine since having a collider that is not a trigger on the mine prevents it from working properly
+            if (dmg != null && hit.collider.CompareTag("Damageable Proximity Mine"))
+            {
+                dmg.takeDamage(shootDamage);
+            }
             if (dmg != null && !hit.collider.isTrigger)
             {
                 dmg.takeDamage(shootDamage);
             }
         }
     }
-  
+
     public void takeDamage(int amount)
     {
+        // update health bar to go down if dmg taken
         HP -= amount;
-        //updatePlayerUI();
-        //StartCoroutine(flashDamagePanel());
+        UpdatePlayerUI();
 
+        // Flash damage panel
+        StartCoroutine(FlashDamagePanel());
+
+        // flash dmg panel because we took dmg
         if (HP <= 0)
         {
-            Debug.Log("You Lose");
-            //gameManager.instance.youLose();
+            //call you lose function in game manager
+            gameManager.instance.YouLose();
         }
+    }
+
+    IEnumerator FlashDamagePanel()
+    {
+        // activate damage panel
+        gameManager.instance.damagePanel.SetActive(true);
+
+        // wait for 0.1 seconds to flash panel
+        yield return new WaitForSeconds(0.1f);
+
+        // turn dmg panel back off
+        gameManager.instance.damagePanel.SetActive(false);
+    }
+
+    void UpdatePlayerUI()
+    {
+        gameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
     }
 
     void updateAnimator()

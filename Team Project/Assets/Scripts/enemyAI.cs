@@ -7,6 +7,7 @@ public class enemyAI : MonoBehaviour, IDamage
     [SerializeField] Renderer model;
 
     [SerializeField] NavMeshAgent agent;
+    [SerializeField] Animator anim;
     [SerializeField] Transform shootPos, headPOS;
     [SerializeField] GameObject bullet;
 
@@ -14,6 +15,7 @@ public class enemyAI : MonoBehaviour, IDamage
     [SerializeField] int faceTargetSpeed;
 
     [SerializeField] int FOV;
+    [SerializeField] int animeSpeedTrans;
 
     [SerializeField] int HP;
 
@@ -38,6 +40,10 @@ public class enemyAI : MonoBehaviour, IDamage
     // Update is called once per frame
     void Update()
     {
+        float agentSpeed = agent.velocity.normalized.magnitude;
+        float animSpeed = anim.GetFloat("Speed");
+
+        anim.SetFloat("Speed", Mathf.MoveTowards(animSpeed, agentSpeed, animeSpeedTrans * Time.deltaTime));
         if (playerInRange && canSeePlayer())
         {
 
