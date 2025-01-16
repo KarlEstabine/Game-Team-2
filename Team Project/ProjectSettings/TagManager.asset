@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - Damageable Proximity Mine
+  - Enemy
   layers:
   - Default
   - TransparentFX
