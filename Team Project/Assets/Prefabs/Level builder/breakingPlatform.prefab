@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 2550535858442614328}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.4, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -80,7 +80,7 @@ GameObject:
   - component: {fileID: 5648775449345946239}
   - component: {fileID: 3952931546313755490}
   - component: {fileID: 406699561140371977}
-  m_Layer: 0
+  m_Layer: 4
   m_Name: breakingPlatform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,7 +97,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4, y: 1, z: 4}
+  m_LocalScale: {x: 4, y: 1, z: 12}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7448911436044445822}
