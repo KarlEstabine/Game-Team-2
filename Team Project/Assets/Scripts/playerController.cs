@@ -215,7 +215,11 @@ public class playerController : MonoBehaviour, IDamage
         dashTimeLeft = dashDuration;
         dashCooldownTimer = dashCooldown;
 
-        dashDir = moveDir != Vector3.zero ? moveDir : transform.forward;
+        Vector3 cameraForward =Camera.main.transform.forward;
+   
+        dashDir = cameraForward.normalized;
+
+
         Debug.Log($"Dash direction: {dashDir}");
 
 
