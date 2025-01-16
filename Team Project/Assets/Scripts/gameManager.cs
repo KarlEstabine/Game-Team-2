@@ -74,8 +74,8 @@ public class gameManager : MonoBehaviour
 
     public void UpdatedGameGoal(int amount)
     {
-        goalCount += amount;
         //update goal count/ how many enemies are dead
+        goalCount += amount;
 
         // win condition
         if (goalCount <= 0)

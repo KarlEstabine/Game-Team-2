@@ -29,6 +29,9 @@ public class enemyAI : MonoBehaviour, IDamage
     {
         colorOrig = model.material.color;
         anim = GetComponent<Animator>();
+
+        // Update the goal count
+        gameManager.instance.UpdatedGameGoal(1);
     }
 
     // Update is called once per frame
@@ -87,6 +90,8 @@ public class enemyAI : MonoBehaviour, IDamage
 
         if (HP <= 0)
         {
+            // Update the goal count
+            gameManager.instance.UpdatedGameGoal(-1);
             Destroy(gameObject);
         }
     }

@@ -169,26 +169,31 @@ public class playerController : MonoBehaviour, IDamage
 
     public void takeDamage(int amount)
     {
+        // update health bar to go down if dmg taken
         HP -= amount;
         UpdatePlayerUI();
-        //update health bar to go down if dmg taken
+
+        // Flash damage panel
         StartCoroutine(FlashDamagePanel());
-        //flash dmg panel because we took dmg
+
+        // flash dmg panel because we took dmg
         if (HP <= 0)
         {
-            gameManager.instance.YouLose();
             //call you lose function in game manager
+            gameManager.instance.YouLose();
         }
     }
 
     IEnumerator FlashDamagePanel()
     {
+        // activate damage panel
         gameManager.instance.damagePanel.SetActive(true);
-        //activate damage panel
+        
+        // wait for 0.1 seconds to flash panel
         yield return new WaitForSeconds(0.1f);
-        //wait for 0.1 seconds to flash panel
+        
+        // turn dmg panel back off
         gameManager.instance.damagePanel.SetActive(false);
-        //turn dmg panel back off
     }
 
     void UpdatePlayerUI()
