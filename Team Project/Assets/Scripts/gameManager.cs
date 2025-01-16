@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class gameManager : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class gameManager : MonoBehaviour
     [SerializeField] GameObject menuPause;
     [SerializeField] GameObject menuWin;
     [SerializeField] GameObject menuLose;
+
+    [SerializeField] TMP_Text goalText;
 
     public GameObject player;
     public playerController playerScript;
@@ -76,6 +79,9 @@ public class gameManager : MonoBehaviour
     {
         //update goal count/ how many enemies are dead
         goalCount += amount;
+
+        // Goal Text
+        goalText.text = goalCount.ToString("F0");
 
         // win condition
         if (goalCount <= 0)
