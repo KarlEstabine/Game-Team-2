@@ -3390,6 +3390,34 @@ PrefabInstance:
       propertyPath: m_Name
       value: Game Manager
       objectReference: {fileID: 0}
+    - target: {fileID: 8302263837069320823, guid: 3aa60a7f15802d84c8fc4eb04d79a0f2, type: 3}
+      propertyPath: menuWin
+      value: 
+      objectReference: {fileID: 3133418808061732536}
+    - target: {fileID: 8302263837069320823, guid: 3aa60a7f15802d84c8fc4eb04d79a0f2, type: 3}
+      propertyPath: goalText
+      value: 
+      objectReference: {fileID: 1824333836746888876}
+    - target: {fileID: 8302263837069320823, guid: 3aa60a7f15802d84c8fc4eb04d79a0f2, type: 3}
+      propertyPath: isPaused
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8302263837069320823, guid: 3aa60a7f15802d84c8fc4eb04d79a0f2, type: 3}
+      propertyPath: menuLose
+      value: 
+      objectReference: {fileID: 9039666860540597615}
+    - target: {fileID: 8302263837069320823, guid: 3aa60a7f15802d84c8fc4eb04d79a0f2, type: 3}
+      propertyPath: menuPause
+      value: 
+      objectReference: {fileID: 3976457356343960008}
+    - target: {fileID: 8302263837069320823, guid: 3aa60a7f15802d84c8fc4eb04d79a0f2, type: 3}
+      propertyPath: damagePanel
+      value: 
+      objectReference: {fileID: 2133687456643124007}
+    - target: {fileID: 8302263837069320823, guid: 3aa60a7f15802d84c8fc4eb04d79a0f2, type: 3}
+      propertyPath: playerHPBar
+      value: 
+      objectReference: {fileID: 4608451087992731547}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
