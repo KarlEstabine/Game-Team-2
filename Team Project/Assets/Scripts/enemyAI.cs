@@ -1,21 +1,23 @@
-using NUnit.Framework;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class enemyAI : MonoBehaviour, IDamage
 {
-    Animator anim;
     [SerializeField] Renderer model;
 
     [SerializeField] NavMeshAgent agent;
-    [SerializeField] Transform shootPos;
+    [SerializeField] Transform shootPos, headPOS;
     [SerializeField] GameObject bullet;
 
     [SerializeField] float shootRate;
     [SerializeField] int faceTargetSpeed;
 
+    [SerializeField] int FOV;
+
     [SerializeField] int HP;
+
+    float angleToPlayer;
 
     bool isShooting;
     bool playerInRange;
@@ -28,7 +30,6 @@ public class enemyAI : MonoBehaviour, IDamage
     void Start()
     {
         colorOrig = model.material.color;
-        anim = GetComponent<Animator>();
 
         // Update the goal count
         gameManager.instance.UpdatedGameGoal(1);
@@ -37,25 +38,40 @@ public class enemyAI : MonoBehaviour, IDamage
     // Update is called once per frame
     void Update()
     {
-        if (playerInRange)
+        if (playerInRange && canSeePlayer())
         {
 
-            playerDir = gameManager.instance.player.transform.position - transform.position;
-            agent.SetDestination(gameManager.instance.player.transform.position);
+            
+        }
+    }
 
-            anim.SetBool("Walking", true);
+    bool canSeePlayer()
+    {
+        playerDir = gameManager.instance.player.transform.position - headPOS.position;
+        angleToPlayer = Vector3.Angle(playerDir, transform.forward);
 
-            if (agent.remainingDistance <= agent.stoppingDistance)
+        Debug.DrawRay(headPOS.position, playerDir);
+
+        RaycastHit hit;
+        if (Physics.Raycast(headPOS.position, playerDir, out hit))
+        {
+            if (hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
             {
-                faceTarget();
-                anim.SetBool("Walking", false);
-            }
+                agent.SetDestination(gameManager.instance.player.transform.position);
 
-            if (!isShooting)
-            {
-                StartCoroutine(shoot());
+                if (agent.remainingDistance <= agent.stoppingDistance)
+                {
+                    faceTarget();
+                }
+
+                if (!isShooting)
+                {
+                    StartCoroutine(shoot());
+                }
+                return true;
             }
         }
+        return false;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -83,8 +99,6 @@ public class enemyAI : MonoBehaviour, IDamage
     public void takeDamage(int amount)
     {
         HP -= amount;
-
-        Debug.Log("HP: " + HP + "\nDamage: " + amount);
 
         StartCoroutine(flashRed());
 
