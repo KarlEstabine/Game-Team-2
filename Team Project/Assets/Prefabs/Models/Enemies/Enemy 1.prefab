@@ -962,12 +962,12 @@ MonoBehaviour:
   agent: {fileID: 7285469141588587248}
   anim: {fileID: 9135015955650627783}
   shootPos: {fileID: 4951827470459566479}
-  headPOS: {fileID: 8103369833503395198}
+  headPOS: {fileID: 8861812658965275765}
   bullet: {fileID: 6131050754550736681, guid: 1b4b797db9265024ba42ac6f35a8f4ad, type: 3}
   shootRate: 0.5
   faceTargetSpeed: 8
-  FOV: 45
-  animeSpeedTrans: 0
+  FOV: 170
+  animeSpeedTrans: 8
   HP: 20
 --- !u!195 &7285469141588587248
 NavMeshAgent:
@@ -1055,7 +1055,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 15
+  m_Radius: 20
   m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &9100601992920647186
 GameObject:

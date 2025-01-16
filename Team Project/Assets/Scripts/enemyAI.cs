@@ -43,7 +43,7 @@ public class enemyAI : MonoBehaviour, IDamage
         float agentSpeed = agent.velocity.normalized.magnitude;
         float animSpeed = anim.GetFloat("Speed");
 
-        anim.SetFloat("Speed", Mathf.MoveTowards(animSpeed, agentSpeed, animeSpeedTrans * Time.deltaTime));
+        anim.SetFloat("Speed", Mathf.MoveTowards(animSpeed, agentSpeed, Time.deltaTime * animeSpeedTrans));
         if (playerInRange && canSeePlayer())
         {
 

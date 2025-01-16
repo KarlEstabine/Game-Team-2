@@ -121,8 +121,8 @@ MonoBehaviour:
   bullet: {fileID: 6131050754550736681, guid: 1b4b797db9265024ba42ac6f35a8f4ad, type: 3}
   shootRate: 0.25
   faceTargetSpeed: 8
-  FOV: 45
-  animeSpeedTrans: 0
+  FOV: 170
+  animeSpeedTrans: 8
   HP: 40
 --- !u!95 &3327923972409615707
 Animator:
@@ -210,7 +210,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 15
+  m_Radius: 20
   m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &705524492563200201
 GameObject:
