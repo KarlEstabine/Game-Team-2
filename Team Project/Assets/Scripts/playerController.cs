@@ -2,52 +2,60 @@ using UnityEngine;
 using Unity.Mathematics;
 using UnityEngine.InputSystem;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class playerController : MonoBehaviour, IDamage
 {
     [SerializeField] CharacterController controller;
-    [SerializeField] LayerMask ignoreMask;
 
-    [SerializeField] float groundCheckDistance;     // Distance to check for ground
+    [SerializeField] LayerMask ignoreMask;
     [SerializeField] LayerMask groundMask;          // Layers considered "ground"
 
     [SerializeField] int HP;
     [SerializeField] int jumpMax;
     [SerializeField] int jumpSpeed;
     [SerializeField] int gravity;
-
     [SerializeField] int shootDamage;
     [SerializeField] int shootDist;
-
     [SerializeField] int leanAngle;
     [SerializeField] int leanSpeed;
 
+    [SerializeField] float groundCheckDistance;     // Distance to check for ground
     [SerializeField] float dashSpeed;
     [SerializeField] float dashDuration;
     [SerializeField] float dashCooldown;
+    [SerializeField] float moveSpeed;
+    [SerializeField] float speedMult;
 
     int HPOrig;
     int jumpCount;
 
-    float currentLean;
-
-    [SerializeField] float moveSpeed;
-    [SerializeField] float speedMult;
+    int originalJumpSpeed;
+    int crouchedJumpSpeed;
 
     bool isSprinting;
-
     bool isLeaningRight;
     bool isLeaningLeft;
-
     bool isDashing = false;
 
+    bool isCrouching;
+
+    float currentLean;
     float dashTimeLeft;
     float dashCooldownTimer;
 
+    float originalMoveSpeed;
+    float crouchedMoveSpeed;
+    float originalHeight;
+    float crouchedHeight;
+
+
     Vector3 moveDir;
     Vector3 playerVel;
-
     Vector3 dashDir;
+
+    Vector3 originalCenter;
+    Vector3 crouchedCenter;
 
     Animator anim;
 
@@ -58,6 +66,15 @@ public class playerController : MonoBehaviour, IDamage
         anim = GetComponent<Animator>();
         HPOrig = HP;
         UpdatePlayerUI();
+
+        originalHeight = controller.height;
+        originalCenter = new Vector3(controller.center.x, controller.center.y, controller.center.z);
+        originalMoveSpeed = moveSpeed;
+        originalJumpSpeed = jumpSpeed;
+        crouchedHeight = controller.height / 2;
+        crouchedCenter = new Vector3(controller.center.x, controller.center.y / 2, controller.center.z);
+        crouchedMoveSpeed = moveSpeed / 2;
+        crouchedJumpSpeed =jumpSpeed / 2;
     }
 
     // Update is called once per frame
@@ -72,6 +89,32 @@ public class playerController : MonoBehaviour, IDamage
         updateAnimator();
         UpdateDashCooldown();
         handleLean();
+        crouch();
+    }
+void crouch()
+    {
+        // Crouch will be toggled
+        if (Input.GetButtonDown("Crouch"))
+        {
+            isCrouching = !isCrouching;
+        }
+
+        // While crouching reduce movement ability and shrink collider
+        if (isCrouching)
+        {           
+            moveSpeed = crouchedMoveSpeed;
+            controller.height = crouchedHeight;
+            controller.center = crouchedCenter;
+            jumpSpeed = crouchedJumpSpeed;
+        }
+        // Ensure that original values are restored if not crouching
+        else
+        {
+            moveSpeed = originalMoveSpeed;
+            controller.height = originalHeight;
+            controller.center = originalCenter;
+            jumpSpeed = originalJumpSpeed;
+        }
     }
 
     void handleLean()
@@ -252,6 +295,9 @@ public class playerController : MonoBehaviour, IDamage
     }
     void dashInput()
     {
+        // Prevent dashing while crouched
+        if (isCrouching)
+            return;
         // Check if the dash button is pressed and all conditions are met
         if (Input.GetButtonDown("Dash") && dashCooldownTimer <= 0 && !isDashing)
         {
