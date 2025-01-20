@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 5bb0895037decbd419fd3d91be3bd3c4
+ShaderImporter:
+  defaultTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 144839
+  packageName: Low Poly Shooter Pack - Free Sample
+  packageVersion: 2.0.0
+  assetPath: Assets/Infima Games/Low Poly Shooter Pack - Free Sample/Art/TextMesh
+    Pro/Resources/Shaders/TMP_SDF-Surface.shader
+  uploadId: 469425

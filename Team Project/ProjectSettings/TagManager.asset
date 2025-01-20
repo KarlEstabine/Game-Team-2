@@ -6,6 +6,18 @@ TagManager:
   tags:
   - Damageable Proximity Mine
   - Enemy
+  - GasTank
+  - ExplosiveBarrel
+  - Metal
+  - Wall
+  - Blood
+  - Dirt
+  - Concrete
+  - Target
+  - Wood
+  - Metal (Static)
+  - Wood (Static)
+  - Dirt (Static)
   layers:
   - Default
   - TransparentFX
@@ -16,14 +28,14 @@ TagManager:
   - Trigger
   - Enemy
   - Enemy Bullet
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Wall
+  - First Person View
+  - Character
+  - Post Processing
+  - Post Processing Weapon
+  - Post Processing Scope
+  - Invisible Wall
+  - Projectile
   - 
   - 
   - 
