@@ -48,14 +48,13 @@ public class playerController : MonoBehaviour, IDamage
     float crouchedMoveSpeed;
     float originalHeight;
     float crouchedHeight;
+    float originalCameraHeight;
+    float crouchedCameraHeight;
 
 
     Vector3 moveDir;
     Vector3 playerVel;
     Vector3 dashDir;
-
-    Vector3 originalCenter;
-    Vector3 crouchedCenter;
 
     Animator anim;
 
@@ -67,14 +66,17 @@ public class playerController : MonoBehaviour, IDamage
         HPOrig = HP;
         UpdatePlayerUI();
 
+        // Assign original values on start
         originalHeight = controller.height;
-        originalCenter = new Vector3(controller.center.x, controller.center.y, controller.center.z);
         originalMoveSpeed = moveSpeed;
         originalJumpSpeed = jumpSpeed;
+        originalCameraHeight = Camera.main.transform.position.y;
+
+        // Crouched values are derived from original values
         crouchedHeight = controller.height / 2;
-        crouchedCenter = new Vector3(controller.center.x, controller.center.y / 2, controller.center.z);
         crouchedMoveSpeed = moveSpeed / 2;
         crouchedJumpSpeed =jumpSpeed / 2;
+        crouchedCameraHeight = Camera.main.transform.position.y / 1.5f;
     }
 
     // Update is called once per frame
@@ -97,23 +99,24 @@ void crouch()
         if (Input.GetButtonDown("Crouch"))
         {
             isCrouching = !isCrouching;
-        }
 
-        // While crouching reduce movement ability and shrink collider
-        if (isCrouching)
-        {           
-            moveSpeed = crouchedMoveSpeed;
-            controller.height = crouchedHeight;
-            controller.center = crouchedCenter;
-            jumpSpeed = crouchedJumpSpeed;
-        }
-        // Ensure that original values are restored if not crouching
-        else
-        {
-            moveSpeed = originalMoveSpeed;
-            controller.height = originalHeight;
-            controller.center = originalCenter;
-            jumpSpeed = originalJumpSpeed;
+            // While crouching reduce movement ability and shrink collider
+            if (isCrouching)
+            {
+                moveSpeed = crouchedMoveSpeed;
+                controller.height = crouchedHeight;
+                jumpSpeed = crouchedJumpSpeed;
+                Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, crouchedCameraHeight, Camera.main.transform.position.z);
+
+            }
+            // Ensure that original values are restored if not crouching
+            else
+            {
+                moveSpeed = originalMoveSpeed;
+                controller.height = originalHeight;
+                jumpSpeed = originalJumpSpeed;
+                Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, originalCameraHeight, Camera.main.transform.position.z);
+            }
         }
     }
 
@@ -188,7 +191,7 @@ void crouch()
         }
         else if (Input.GetButtonUp("Sprint"))
         {
-            moveSpeed /= speedMult;
+            moveSpeed = originalMoveSpeed;
             isSprinting = false;
         }
     }
@@ -318,7 +321,7 @@ void crouch()
         dashTimeLeft = dashDuration;
         dashCooldownTimer = dashCooldown;
 
-        Vector3 cameraForward =Camera.main.transform.forward;
+        Vector3 cameraForward = Camera.main.transform.forward;
    
         dashDir = cameraForward.normalized;
 
