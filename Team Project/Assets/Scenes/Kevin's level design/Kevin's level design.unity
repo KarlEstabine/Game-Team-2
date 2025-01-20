@@ -7741,6 +7741,10 @@ PrefabInstance:
       propertyPath: dashDuration
       value: 0.4
       objectReference: {fileID: 0}
+    - target: {fileID: 4731376032824634471, guid: 5e6644c1037b40f4a989836912a01f42, type: 3}
+      propertyPath: crouchedCameraHeightChange
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
