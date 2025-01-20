@@ -917,16 +917,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 606043960697361602}
-  - component: {fileID: 7653879569752236754}
+  - component: {fileID: 876594024829238761}
   - component: {fileID: 8755323520381922782}
-  - component: {fileID: 7823587774776049496}
-  - component: {fileID: 7122517557399836736}
-  - component: {fileID: 2889061873429045139}
+  - component: {fileID: 3081538195932091355}
+  - component: {fileID: 4966440967658924222}
+  - component: {fileID: 2751206443404530497}
   - component: {fileID: 7285469141588587248}
   - component: {fileID: 9135015955650627783}
   - component: {fileID: 166421082030112540}
   m_Layer: 0
-  m_Name: Enemy 1
+  m_Name: Enemy Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -949,7 +949,7 @@ Transform:
   - {fileID: 3729144924787023227}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7653879569752236754
+--- !u!114 &876594024829238761
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -963,18 +963,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Graph: {fileID: 3935278898442656380, guid: a0614bbe646a45a4b84e0c68ccb6a1bd, type: 2}
   m_BlackboardVariableOverridesList:
-  - rid: 9054222499108356415
-  - rid: 9054222499108356416
-  - rid: 9054222499108356417
-  - rid: 9054222499108356418
-  - rid: 9054222499108356419
-  - rid: 9054222499108356425
+  - rid: 9054222493897195746
+  - rid: 9054222493897195782
+  - rid: 9054222493897196116
+  - rid: 9054222493897196435
+  - rid: 9054222496285589684
+  - rid: 9054222496285590105
+  - rid: 9054222497343603276
+  - rid: 9054222497732362827
   m_IsInitialised: 0
   m_IsStarted: 0
   references:
     version: 2
     RefIds:
-    - rid: 9054222499108356415
+    - rid: 9054222493897195746
       type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -982,31 +984,39 @@ MonoBehaviour:
           m_Value1: 0
         Name: Self
         m_Value: {fileID: 8610788986937267103}
-    - rid: 9054222499108356416
+    - rid: 9054222493897195782
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 14888811335072498938
+          m_Value1: 4512775228993010243
+        Name: Target
+        m_Value: {fileID: 0}
+    - rid: 9054222493897196116
       type: {class: 'BlackboardVariable`1[[RangeDetector, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
           m_Value0: 8087069455293499879
           m_Value1: 7163229720318261499
         Name: New Range Detector
-        m_Value: {fileID: 7122517557399836736}
-    - rid: 9054222499108356417
-      type: {class: 'BlackboardVariable`1[[EnemyAttack, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 4292399370964083054
-          m_Value1: 9693323287518422463
-        Name: New Enemy Attack
-        m_Value: {fileID: 2889061873429045139}
-    - rid: 9054222499108356418
+        m_Value: {fileID: 4966440967658924222}
+    - rid: 9054222493897196435
       type: {class: 'BlackboardVariable`1[[LineOfSightDetector, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
           m_Value0: 18224155380311160193
           m_Value1: 1815038358910827103
         Name: New Line Of Sight Detector
-        m_Value: {fileID: 7823587774776049496}
-    - rid: 9054222499108356419
+        m_Value: {fileID: 3081538195932091355}
+    - rid: 9054222496285589684
+      type: {class: 'BlackboardVariable`1[[System.Int32, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 3327751423302177861
+          m_Value1: 10931167344643457434
+        Name: AttackRange
+        m_Value: 8
+    - rid: 9054222496285590105
       type: {class: 'BlackboardVariable`1[[System.Collections.Generic.List`1[[UnityEngine.GameObject, UnityEngine.CoreModule]], mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
@@ -1016,14 +1026,26 @@ MonoBehaviour:
         m_Value:
         - {fileID: 0}
         - {fileID: 0}
-    - rid: 9054222499108356425
-      type: {class: 'BlackboardVariable`1[[System.Int32, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+        - {fileID: 0}
+        - {fileID: 0}
+        - {fileID: 0}
+        - {fileID: 0}
+    - rid: 9054222497343603276
+      type: {class: 'BlackboardVariable`1[[EnemyState, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:
-          m_Value0: 3327751423302177861
-          m_Value1: 10931167344643457434
-        Name: AttackRange
-        m_Value: 8
+          m_Value0: 16631356897594119532
+          m_Value1: 14912789182597175710
+        Name: CurrentState
+        m_Value: 0
+    - rid: 9054222497732362827
+      type: {class: 'BlackboardVariable`1[[EnemyAttack, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 4292399370964083054
+          m_Value1: 9693323287518422463
+        Name: New Enemy Attack
+        m_Value: {fileID: 2751206443404530497}
 --- !u!114 &8755323520381922782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1038,7 +1060,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HP: 20
   model: {fileID: 2998045402729682009}
---- !u!114 &7823587774776049496
+--- !u!114 &3081538195932091355
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1056,10 +1078,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 9
   FOV: 90
-  showDebugVisuals: 0
+  showDebugVisuals: 1
   agent: {fileID: 7285469141588587248}
   faceTargetSpeed: 40
---- !u!114 &7122517557399836736
+--- !u!114 &4966440967658924222
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1076,7 +1098,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   showDebugVisuals: 0
---- !u!114 &2889061873429045139
+--- !u!114 &2751206443404530497
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1106,7 +1128,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 4
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

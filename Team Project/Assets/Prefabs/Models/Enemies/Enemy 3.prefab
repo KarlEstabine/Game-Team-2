@@ -743,7 +743,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7808871022710085071}
+  - component: {fileID: 6369412447647387423}
   - component: {fileID: 2619730276427271258}
+  - component: {fileID: 4731850472105692495}
+  - component: {fileID: 7282451275306392787}
+  - component: {fileID: 6395455049968055193}
   - component: {fileID: 7852470220924773362}
   - component: {fileID: 3611255347744223710}
   - component: {fileID: 2557908579672486307}
@@ -772,6 +776,81 @@ Transform:
   - {fileID: 1363792735559624309}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!114 &6369412447647387423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6557888924786750579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Graph: {fileID: 3935278898442656380, guid: a0614bbe646a45a4b84e0c68ccb6a1bd, type: 2}
+  m_BlackboardVariableOverridesList:
+  - rid: 9054222499108356426
+  - rid: 9054222499108356427
+  - rid: 9054222499108356428
+  - rid: 9054222499108356429
+  - rid: 9054222499108356430
+  - rid: 9054222499108356431
+  m_IsInitialised: 0
+  m_IsStarted: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 9054222499108356426
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 6557888924786750579}
+    - rid: 9054222499108356427
+      type: {class: 'BlackboardVariable`1[[System.Collections.Generic.List`1[[UnityEngine.GameObject, UnityEngine.CoreModule]], mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 5055791449107499433
+          m_Value1: 7323371743757784625
+        Name: PatrollPoints
+        m_Value:
+        - {fileID: 0}
+        - {fileID: 0}
+    - rid: 9054222499108356428
+      type: {class: 'BlackboardVariable`1[[EnemyAttack, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 4292399370964083054
+          m_Value1: 9693323287518422463
+        Name: New Enemy Attack
+        m_Value: {fileID: 6395455049968055193}
+    - rid: 9054222499108356429
+      type: {class: 'BlackboardVariable`1[[RangeDetector, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 8087069455293499879
+          m_Value1: 7163229720318261499
+        Name: New Range Detector
+        m_Value: {fileID: 7282451275306392787}
+    - rid: 9054222499108356430
+      type: {class: 'BlackboardVariable`1[[LineOfSightDetector, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 18224155380311160193
+          m_Value1: 1815038358910827103
+        Name: New Line Of Sight Detector
+        m_Value: {fileID: 4731850472105692495}
+    - rid: 9054222499108356431
+      type: {class: 'BlackboardVariable`1[[System.Int32, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 3327751423302177861
+          m_Value1: 10931167344643457434
+        Name: AttackRange
+        m_Value: 8
 --- !u!114 &2619730276427271258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -784,17 +863,62 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c6a38a6f6a0c1b4d94808333c32d5b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  model: {fileID: 1868699722607708651}
-  agent: {fileID: 3611255347744223710}
-  anim: {fileID: 7852470220924773362}
-  shootPos: {fileID: 7733427396693593385}
-  headPOS: {fileID: 3171647180560108886}
-  bullet: {fileID: 6131050754550736681, guid: 1b4b797db9265024ba42ac6f35a8f4ad, type: 3}
-  shootRate: 0.25
-  faceTargetSpeed: 8
-  FOV: 170
-  animeSpeedTrans: 8
   HP: 50
+  model: {fileID: 1868699722607708651}
+--- !u!114 &4731850472105692495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6557888924786750579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec595a192d2d29741b186f4cfdefe3a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_detectionHeight: 1
+  m_detectionRange: 29
+  m_playerLayerMask:
+    serializedVersion: 2
+    m_Bits: 9
+  FOV: 90
+  showDebugVisuals: 1
+  agent: {fileID: 3611255347744223710}
+  faceTargetSpeed: 40
+--- !u!114 &7282451275306392787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6557888924786750579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24fd8968a76ce164e95c90bb2faa60fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 30
+  detectionMask:
+    serializedVersion: 2
+    m_Bits: 8
+  showDebugVisuals: 0
+--- !u!114 &6395455049968055193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6557888924786750579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e28c902d33cb0647940fe37f13605b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bullet: {fileID: 6131050754550736681, guid: 1b4b797db9265024ba42ac6f35a8f4ad, type: 3}
+  shootPos: {fileID: 7733427396693593385}
+  shootRate: 0.3
+  isShooting: 0
 --- !u!95 &7852470220924773362
 Animator:
   serializedVersion: 7
