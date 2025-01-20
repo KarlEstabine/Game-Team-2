@@ -50,6 +50,7 @@ public class playerController : MonoBehaviour, IDamage
     float crouchedMoveSpeed;
     float originalHeight;
     float crouchedHeight;
+    float originalCameraHeight;
 
     Vector3 moveDir;
     Vector3 playerVel;
@@ -69,6 +70,7 @@ public class playerController : MonoBehaviour, IDamage
         originalHeight = controller.height;
         originalMoveSpeed = moveSpeed;
         originalJumpSpeed = jumpSpeed;
+        originalCameraHeight = Camera.main.transform.position.y;
 
         // Crouched values are derived from original values
         crouchedHeight = controller.height / 2;
@@ -103,7 +105,7 @@ void crouch()
                 moveSpeed = crouchedMoveSpeed;
                 controller.height = crouchedHeight;
                 jumpSpeed = crouchedJumpSpeed;
-                Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y - crouchedCameraHeightChange, Camera.main.transform.position.z);
+                Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, originalCameraHeight - crouchedCameraHeightChange, Camera.main.transform.position.z);
 
             }
             // Ensure that original values are restored if not crouching
@@ -112,7 +114,7 @@ void crouch()
                 moveSpeed = originalMoveSpeed;
                 controller.height = originalHeight;
                 jumpSpeed = originalJumpSpeed;
-                Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y + crouchedCameraHeightChange, Camera.main.transform.position.z);
+                Camera.main.transform.position = new Vector3(Camera.main.transform.position.x, originalCameraHeight, Camera.main.transform.position.z);
             }
         }
     }
