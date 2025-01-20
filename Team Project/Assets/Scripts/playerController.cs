@@ -302,4 +302,10 @@ public class playerController : MonoBehaviour, IDamage
             dashCooldownTimer -= Time.deltaTime;
         }
     }
+
+    public void getGunStats(GunStats gun)
+    {
+
+    }
+
 }
