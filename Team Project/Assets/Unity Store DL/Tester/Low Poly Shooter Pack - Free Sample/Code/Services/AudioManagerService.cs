@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 namespace InfimaGames.LowPolyShooterPack
 {
@@ -10,6 +11,29 @@ namespace InfimaGames.LowPolyShooterPack
     /// </summary>
     public class AudioManagerService : MonoBehaviour, IAudioManagerService
     {
+        private void Awake()
+        {
+            DontDestroyOnLoad(gameObject);
+        }
+
+        private void OnEnable()
+        {
+            // Subscribe to the sceneLoaded event
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private void OnDisable()
+        {
+            // Unsubscribe from the sceneLoaded event
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            // Stop all coroutines when the scene reloads
+            StopAllCoroutines();
+        }
+
         /// <summary>
         /// Contains data related to playing a OneShot audio.
         /// </summary>
@@ -49,10 +73,11 @@ namespace InfimaGames.LowPolyShooterPack
         {
             //Wait for the audio source to complete playing the clip.
             yield return new WaitWhile(() => source.isPlaying);
-            
+
             //Destroy the audio game object, since we're not using it anymore.
             //This isn't really too great for performance, but it works, for now.
-            DestroyImmediate(source.gameObject);
+            if (source != null && source.gameObject != null)
+                DestroyImmediate(source.gameObject);
         }
 
         /// <summary>

@@ -5,8 +5,10 @@ using InfimaGames.LowPolyShooterPack;
 using Random = UnityEngine.Random;
 
 public class Projectile : MonoBehaviour {
+	[HideInInspector]
+	public int damage = 10; // Default damage, can be overridden by the weapon
 
-	[Range(5, 100)]
+    [Range(5, 100)]
 	[Tooltip("After how long time should the bullet prefab be destroyed?")]
 	public float destroyAfter;
 	[Tooltip("If enabled the bullet destroys on impact")]
@@ -22,7 +24,16 @@ public class Projectile : MonoBehaviour {
 	public Transform [] dirtImpactPrefabs;
 	public Transform []	concreteImpactPrefabs;
 
-	private void Start ()
+    /// <summary>
+    /// Sets the damage for this projectile.
+    /// </summary>
+    /// <param name="amount">The amount of damage to set.</param>
+    public void SetDamage(int amount)
+    {
+        damage = amount;
+    }
+
+    private void Start ()
 	{
 		//Grab the game mode service, we need it to access the player character!
 		var gameModeService = ServiceLocator.Current.Get<IGameModeService>();
@@ -66,8 +77,10 @@ public class Projectile : MonoBehaviour {
 			Destroy (gameObject);
 		}
 
-		//If bullet collides with "Blood" tag
-		if (collision.transform.tag == "Blood") 
+        #region Effects
+
+        //If bullet collides with "Blood" tag
+        if (collision.transform.tag == "Blood") 
 		{
 			//Instantiate random impact prefab from array
 			Instantiate (bloodImpactPrefabs [Random.Range 
@@ -110,8 +123,12 @@ public class Projectile : MonoBehaviour {
 			Destroy(gameObject);
 		}
 
-		//If bullet collides with "Target" tag
-		if (collision.transform.tag == "Target") 
+        #endregion
+
+        #region Damage
+
+        //If bullet collides with "Target" tag
+        if (collision.transform.tag == "Target") 
 		{
 			//Toggle "isHit" on target object
 			collision.transform.gameObject.GetComponent
@@ -135,13 +152,32 @@ public class Projectile : MonoBehaviour {
 		{
 			//Toggle "isHit" on gas tank object
 			collision.transform.gameObject.GetComponent
-				<GasTankScript> ().isHit = true;
+				<GasTankScript>().isHit = true;
 			//Destroy bullet object
 			Destroy(gameObject);
 		}
-	}
 
-	private IEnumerator DestroyTimer () 
+        // ?. is the null-conditional operator, it will only call the method if the object is not null.
+        if (collision.transform.tag == "Enemy")
+        {   //Toggle "Take Damage" on enemy object
+            collision.transform.gameObject.GetComponent
+                <enemyAI>()?.takeDamage(damage);
+            //Destroy bullet object
+            Destroy(gameObject);
+        }
+
+        if (collision.transform.tag == "Proximity Mine")
+        {   //Toggle "Take Damage" on mine object
+            collision.transform.gameObject.GetComponent
+                <ProximityMine>().explode = true;
+            //Destroy bullet object
+            Destroy(gameObject);
+        }
+
+        #endregion
+    }
+
+    private IEnumerator DestroyTimer () 
 	{
 		//Wait random time based on min and max values
 		yield return new WaitForSeconds

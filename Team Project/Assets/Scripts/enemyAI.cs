@@ -21,6 +21,8 @@ public class enemyAI : MonoBehaviour, IDamage
 
     public void takeDamage(int amount)
     {
+        Debug.Log($"Enemy took {amount} points of damage");
+
         // Reduce the HP by the amount
         HP -= amount;
 

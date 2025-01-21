@@ -1,14 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Unity.Collections;
+using InfimaGames.LowPolyShooterPack;
 
 public class ExplosiveBarrelScript : MonoBehaviour {
 
 	float randomTime;
 	bool routineStarted = false;
 
-	//Used to check if the barrel 
-	//has been hit and should explode 
-	public bool explode = false;
+    [SerializeField] int explosionDamage;
+
+    //Used to check if the barrel 
+    //has been hit and should explode 
+    public bool explode = false;
 
 	[Header("Prefabs")]
 	//The explosion prefab
@@ -27,8 +31,8 @@ public class ExplosiveBarrelScript : MonoBehaviour {
 	public float explosionRadius = 12.5f;
 	//How powerful the explosion is
 	public float explosionForce = 4000.0f;
-	
-	private void Update () {
+
+    private void Update () {
 		//Generate random time based on min and max time values
 		randomTime = Random.Range (minTime, maxTime);
 
@@ -55,33 +59,54 @@ public class ExplosiveBarrelScript : MonoBehaviour {
 		//Explosion force
 		Vector3 explosionPos = transform.position;
 		Collider[] colliders = Physics.OverlapSphere(explosionPos, explosionRadius);
-		foreach (Collider hit in colliders) {
-			Rigidbody rb = hit.GetComponent<Rigidbody> ();
-			
+		foreach (Collider hit in colliders)
+		{
+			Rigidbody rb = hit.GetComponent<Rigidbody>();
+
 			//Add force to nearby rigidbodies
 			if (rb != null)
-				rb.AddExplosionForce (explosionForce * 50, explosionPos, explosionRadius);
+				rb.AddExplosionForce(explosionForce * 50, explosionPos, explosionRadius);
 
 			//If the barrel explosion hits other barrels with the tag "ExplosiveBarrel"
-			if (hit.transform.tag == "ExplosiveBarrel") 
+			if (hit.transform.tag == "ExplosiveBarrel")
 			{
 				//Toggle the explode bool on the explosive barrel object
 				hit.transform.gameObject.GetComponent<ExplosiveBarrelScript>().explode = true;
 			}
-				
-			//If the explosion hit the tag "Target"
-			if (hit.transform.tag == "Target") 
+
+			//If the barrel explosion hit the tag "Target"
+			if (hit.transform.tag == "Target")
 			{
 				//Toggle the isHit bool on the target object
 				hit.transform.gameObject.GetComponent<TargetScript>().isHit = true;
 			}
 
-			//If the explosion hit the tag "GasTank"
-			if (hit.GetComponent<Collider>().tag == "GasTank") 
+			//If the barrel explosion hit the tag "GasTank"
+			if (hit.GetComponent<Collider>().tag == "GasTank")
 			{
 				//If gas tank is within radius, explode it
-				hit.gameObject.GetComponent<GasTankScript> ().isHit = true;
-				hit.gameObject.GetComponent<GasTankScript> ().explosionTimer = 0.05f;
+				hit.gameObject.GetComponent<GasTankScript>().isHit = true;
+				hit.gameObject.GetComponent<GasTankScript>().explosionTimer = 0.05f;
+			}
+
+			//If the barrel explosion hit the tag "Proximity Mine"
+			if (hit.transform.tag == "Proximity Mine")
+			{
+				//Toggle "Take Damage" on mine object
+				hit.transform.gameObject.GetComponent<ProximityMine>().explode = true;
+			}
+
+			//If the barrel explosion hit the tag "Enemy"
+			if (hit.transform.tag == "Enemy")
+			{
+				//Toggle "Take Damage" on enemy object
+				hit.transform.gameObject.GetComponent<enemyAI>()?.takeDamage(explosionDamage);
+			}
+
+            //If the barrel explosion hit the tag "Player"
+            if (hit.transform.tag == "Player")
+			{  //Toggle "Take Damage" on player object
+				hit.transform.gameObject.GetComponent<Character>()?.takeDamage(explosionDamage);
 			}
 		}
 

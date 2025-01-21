@@ -10,7 +10,12 @@ namespace InfimaGames.LowPolyShooterPack
     public class Weapon : WeaponBehaviour
     {
         #region FIELDS SERIALIZED
-        
+
+        [Header("Weapon Settings")]
+        [Tooltip("Damage dealt by this weapon's projectiles.")]
+        [SerializeField]
+        private int damage = 10; // Default damage for this weapon
+
         [Header("Firing")]
 
         [Tooltip("Is this weapon automatic? If yes, then holding down the firing button will continuously fire.")]
@@ -127,11 +132,17 @@ namespace InfimaGames.LowPolyShooterPack
         /// The player character's camera.
         /// </summary>
         private Transform playerCamera;
-        
+
+        #endregion
+
+        #region SETTERS
+
+        public int GetDamage() => damage;
+
         #endregion
 
         #region UNITY
-        
+
         protected override void Awake()
         {
             //Get Animator.
@@ -232,7 +243,15 @@ namespace InfimaGames.LowPolyShooterPack
                 rotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);
                 
             //Spawn projectile from the projectile spawn point.
-            GameObject projectile = Instantiate(prefabProjectile, muzzleSocket.position, rotation);
+            GameObject projectileObject = Instantiate(prefabProjectile, muzzleSocket.position, rotation);
+
+            // Set the projectile's damage
+            Projectile projectile = projectileObject.GetComponent<Projectile>();
+            if (projectile != null)
+            {
+                projectile.SetDamage(damage);
+            }
+
             //Add velocity to the projectile.
             projectile.GetComponent<Rigidbody>().linearVelocity = projectile.transform.forward * projectileImpulse;   
         }

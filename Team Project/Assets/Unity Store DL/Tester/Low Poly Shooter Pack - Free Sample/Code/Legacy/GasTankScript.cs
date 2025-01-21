@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using InfimaGames.LowPolyShooterPack;
 
 public class GasTankScript : MonoBehaviour {
 
@@ -8,9 +9,11 @@ public class GasTankScript : MonoBehaviour {
 
 	bool routineStarted = false;
 
-	//Used to check if the gas tank 
-	//has been hit
-	public bool isHit = false;
+    [SerializeField] int explosionDamage;
+
+    //Used to check if the gas tank 
+    //has been hit
+    public bool isHit = false;
 
 	[Header("Prefabs")]
 	//Explosion prefab
@@ -137,12 +140,40 @@ public class GasTankScript : MonoBehaviour {
 				//Toggle the isHit bool on the gas tank object
 				hit.transform.gameObject.GetComponent<GasTankScript>().isHit = true;
 			}
-			//If the gas tank explosion hits any explosive barrel
-			if (hit.transform.tag == "ExplosiveBarrel") {
+
+            //If the gas tank explosion hit the tag "Target"
+            if (hit.transform.tag == "Target")
+            {
+                //Toggle the isHit bool on the target object
+                hit.transform.gameObject.GetComponent<TargetScript>().isHit = true;
+            }
+
+            //If the gas tank explosion hits the tag "ExplosiveBarrel"
+            if (hit.transform.tag == "ExplosiveBarrel") {
 				//Toggle explode bool on explosive barrel object
 				hit.transform.gameObject.GetComponent<ExplosiveBarrelScript>().explode = true;
 			}
-		}
+
+            //If the gas tank explosion hit the tag "Proximity Mine"
+            if (hit.transform.tag == "Proximity Mine")
+            {
+                //Toggle "Take Damage" on mine object
+                hit.transform.gameObject.GetComponent<ProximityMine>().explode = true;
+            }
+
+            //If the gas tank explosion hit the tag "Enemy"
+            if (hit.transform.tag == "Enemy")
+            {
+                //Toggle "Take Damage" on enemy object
+                hit.transform.gameObject.GetComponent<enemyAI>()?.takeDamage(explosionDamage);
+            }
+
+            //If the barrel explosion hit the tag "Player"
+            if (hit.transform.tag == "Player")
+            {  //Toggle "Take Damage" on player object
+                hit.transform.gameObject.GetComponent<Character>()?.takeDamage(explosionDamage);
+            }
+        }
 		
 		//Spawn the explosion prefab
 		Instantiate (explosionPrefab, transform.position, 

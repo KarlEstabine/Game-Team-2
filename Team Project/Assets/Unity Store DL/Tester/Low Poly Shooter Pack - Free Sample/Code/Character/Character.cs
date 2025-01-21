@@ -14,9 +14,11 @@ namespace InfimaGames.LowPolyShooterPack
 	[RequireComponent(typeof(CharacterKinematics))]
 	public sealed class Character : CharacterBehaviour
 	{
-		#region FIELDS SERIALIZED
+        #region FIELDS SERIALIZED
 
-		[Header("Inventory")]
+        [SerializeField] int HP;
+
+        [Header("Inventory")]
 		
 		[Tooltip("Inventory.")]
 		[SerializeField]
@@ -44,14 +46,16 @@ namespace InfimaGames.LowPolyShooterPack
 		[SerializeField]
 		private Animator characterAnimator;
 
-		#endregion
+        #endregion
 
-		#region FIELDS
+        #region FIELDS
 
-		/// <summary>
-		/// True if the character is aiming.
-		/// </summary>
-		private bool aiming;
+        int HPOrig;
+
+        /// <summary>
+        /// True if the character is aiming.
+        /// </summary>
+        private bool aiming;
 		/// <summary>
 		/// True if the character is running.
 		/// </summary>
@@ -189,8 +193,11 @@ namespace InfimaGames.LowPolyShooterPack
 		}
 		protected override void Start()
 		{
-			//Cache a reference to the holster layer's index.
-			layerHolster = characterAnimator.GetLayerIndex("Layer Holster");
+            HPOrig = HP;
+            UpdatePlayerUI();
+
+            //Cache a reference to the holster layer's index.
+            layerHolster = characterAnimator.GetLayerIndex("Layer Holster");
 			//Cache a reference to the action layer's index.
 			layerActions = characterAnimator.GetLayerIndex("Layer Actions");
 			//Cache a reference to the overlay layer's index.
@@ -237,12 +244,47 @@ namespace InfimaGames.LowPolyShooterPack
 				characterKinematics.Compute();
 			}
 		}
-		
-		#endregion
 
-		#region GETTERS
+        public void takeDamage(int amount)
+        {
+            // update health bar to go down if dmg taken
+            HP -= amount;
+			Debug.Log($"Player took {amount} points of damage");
+            UpdatePlayerUI();
 
-		public override Camera GetCameraWorld() => cameraWorld;
+            // Flash damage panel
+            StartCoroutine(FlashDamagePanel());
+
+            // flash dmg panel because we took dmg
+            if (HP <= 0)
+            {
+                //call you lose function in game manager
+                gameManager.instance.YouLose();
+            }
+        }
+
+        IEnumerator FlashDamagePanel()
+        {
+            // activate damage panel
+            gameManager.instance.damagePanel.SetActive(true);
+
+            // wait for 0.1 seconds to flash panel
+            yield return new WaitForSeconds(0.1f);
+
+            // turn dmg panel back off
+            gameManager.instance.damagePanel.SetActive(false);
+        }
+
+        void UpdatePlayerUI()
+        {
+            gameManager.instance.playerHPBar.fillAmount = (float)HP / HPOrig;
+        }
+
+        #endregion
+
+        #region GETTERS
+
+        public override Camera GetCameraWorld() => cameraWorld;
 
 		public override InventoryBehaviour GetInventory() => inventory;
 		

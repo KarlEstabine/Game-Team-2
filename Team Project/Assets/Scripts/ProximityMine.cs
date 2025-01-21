@@ -1,0 +1,131 @@
+using System.Collections;
+using UnityEngine;
+using InfimaGames.LowPolyShooterPack;
+
+public class ProximityMine : MonoBehaviour
+{
+    float randomTime;
+    bool routineStarted = false;
+
+    [SerializeField] int explosionDamage;
+
+    //Used to check if the barrel 
+    //has been hit and should explode 
+    public bool explode = false;
+
+    [Header("Prefabs")]
+    //The explosion prefab
+    public Transform explosionPrefab;
+
+    [Header("Customizable Options")]
+    //Minimum time before the barrel explodes
+    public float minTime = 0.05f;
+    //Maximum time before the barrel explodes
+    public float maxTime = 0.25f;
+
+    [Header("Explosion Options")]
+    //How far the explosion will reach
+    public float explosionRadius = 12.5f;
+    //How powerful the explosion is
+    public float explosionForce = 4000.0f;
+
+    // Update is called once per frame
+    void Update()
+    {
+        //Generate random time based on min and max time values
+        randomTime = Random.Range(minTime, maxTime);
+
+        //If the barrel is hit
+        if (explode == true)
+        {
+            if (routineStarted == false)
+            {
+                //Start the explode coroutine
+                StartCoroutine(Explode());
+                routineStarted = true;
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // When a player or enemy enters the trigger radius, the mine activates
+        if (!explode && (other.CompareTag("Player") || other.CompareTag("Enemy")))
+        {
+            // When the mine is stepped on, it explodes 
+            explode = true;
+        }
+    }
+
+    private IEnumerator Explode()
+    {
+        //Wait for set amount of time
+        yield return new WaitForSeconds(randomTime);
+
+        //Explosion force
+        Vector3 explosionPos = transform.position;
+        Collider[] colliders = Physics.OverlapSphere(explosionPos, explosionRadius);
+        foreach (Collider hit in colliders)
+        {
+            Rigidbody rb = hit.GetComponent<Rigidbody>();
+
+            //Add force to nearby rigidbodies
+            if (rb != null)
+                rb.AddExplosionForce(explosionForce * 50, explosionPos, explosionRadius);
+
+            //If the mine explosion hit otheer mine with the tag "Proximity Mine"
+            if (hit.transform.tag == "Proximity Mine")
+            {
+                //Toggle "Take Damage" on mine object
+                hit.transform.gameObject.GetComponent<ProximityMine>().explode = true;
+            }
+
+            //If the mine explosion hits the tag "ExplosiveBarrel"
+            if (hit.transform.tag == "ExplosiveBarrel")
+            {
+                //Toggle the explode bool on the explosive barrel object
+                hit.transform.gameObject.GetComponent<ExplosiveBarrelScript>().explode = true;
+            }
+
+            //If the mine explosion hit the tag "Target"
+            if (hit.transform.tag == "Target")
+            {
+                //Toggle the isHit bool on the target object
+                hit.transform.gameObject.GetComponent<TargetScript>().isHit = true;
+            }
+
+            //If the mine explosion hit the tag "GasTank"
+            if (hit.GetComponent<Collider>().tag == "GasTank")
+            {
+                //If gas tank is within radius, explode it
+                hit.gameObject.GetComponent<GasTankScript>().isHit = true;
+                hit.gameObject.GetComponent<GasTankScript>().explosionTimer = 0.05f;
+            }
+
+            //If the mine explosion hit the tag "Enemy"
+            if (hit.transform.tag == "Enemy")
+            {
+                //Toggle "Take Damage" on enemy object
+                hit.transform.gameObject.GetComponent<enemyAI>()?.takeDamage(explosionDamage);
+            }
+
+            //If the barrel explosion hit the tag "Player"
+            if (hit.transform.tag == "Player")
+            {  //Toggle "Take Damage" on player object
+                hit.transform.gameObject.GetComponent<Character>()?.takeDamage(explosionDamage);
+            }
+        }
+
+        //Raycast downwards to check the ground tag
+        RaycastHit checkGround;
+        if (Physics.Raycast(transform.position, Vector3.down, out checkGround, 50))
+        {
+            //Instantiate explosion prefab at hit position
+            Instantiate(explosionPrefab, checkGround.point,
+                Quaternion.FromToRotation(Vector3.forward, checkGround.normal));
+        }
+
+        //Destroy the current barrel object
+        Destroy(gameObject);
+    }
+}

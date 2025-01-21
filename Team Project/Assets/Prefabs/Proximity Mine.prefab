@@ -9,14 +9,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 125707273556112482}
-  - component: {fileID: 657851822366625325}
+  - component: {fileID: 3189309607130360272}
   - component: {fileID: 5628009725264872707}
   - component: {fileID: 5926714257800984507}
   - component: {fileID: 667492657838219207}
-  - component: {fileID: 418398853612932484}
+  - component: {fileID: 5837305077964722159}
   m_Layer: 0
-  m_Name: Damageable Proximity Mine
-  m_TagString: Damageable Proximity Mine
+  m_Name: Proximity Mine
+  m_TagString: Proximity Mine
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36,7 +36,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &657851822366625325
+--- !u!114 &3189309607130360272
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,13 +45,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 1030706716750036371}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df6b153b90833484d96e3e3e5203adf9, type: 3}
+  m_Script: {fileID: 11500000, guid: 39c0b22ed5d711540a0469aa48fe29d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 1
-  triggerRadius: 1
+  HP: 50
+  explosionDamage: 60
+  explode: 0
+  explosionPrefab: {fileID: 4296680985399300, guid: ca26d7307564ff848b29e32bbe6279ef, type: 3}
+  minTime: 0.05
+  maxTime: 0.25
   explosionRadius: 5
-  explosionDamage: 2
+  explosionForce: 400
 --- !u!33 &5628009725264872707
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -125,9 +129,9 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!135 &418398853612932484
-SphereCollider:
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!64 &5837305077964722159
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -143,7 +147,8 @@ SphereCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}

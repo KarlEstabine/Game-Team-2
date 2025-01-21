@@ -4,7 +4,6 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Damageable Proximity Mine
   - Enemy
   - GasTank
   - ExplosiveBarrel
@@ -18,6 +17,8 @@ TagManager:
   - Metal (Static)
   - Wood (Static)
   - Dirt (Static)
+  - Proximity Mine
+  - Bullet
   layers:
   - Default
   - TransparentFX

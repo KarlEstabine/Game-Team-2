@@ -22,7 +22,7 @@ namespace InfimaGames.LowPolyShooterPack
         {
             //Make sure we have a player character that is good to go!
             if (playerCharacter == null)
-                playerCharacter = UnityEngine.Object.FindObjectOfType<CharacterBehaviour>();
+                playerCharacter = UnityEngine.Object.FindFirstObjectByType<CharacterBehaviour>();
             
             //Return.
             return playerCharacter;
