@@ -211,14 +211,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: P_LPSP_UI_Canvas
       objectReference: {fileID: 0}
-    - target: {fileID: 5393623835024644669, guid: 48d7771c50bd625489d38055025597a3, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8267263323337574943, guid: 48d7771c50bd625489d38055025597a3, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8459287419928948021, guid: 48d7771c50bd625489d38055025597a3, type: 3}
       propertyPath: player
       value: 
