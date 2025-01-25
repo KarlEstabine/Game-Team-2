@@ -151,7 +151,7 @@ namespace InfimaGames.LowPolyShooterPack
 		/// <summary>
 		/// True if the game cursor is locked! Used when pressing "Escape" to allow developers to more easily access the editor.
 		/// </summary>
-		private bool cursorLocked;
+		public bool cursorLocked;
 
 		#endregion
 
@@ -249,7 +249,6 @@ namespace InfimaGames.LowPolyShooterPack
         {
             // update health bar to go down if dmg taken
             HP -= amount;
-			Debug.Log($"Player took {amount} points of damage");
             UpdatePlayerUI();
 
             // Flash damage panel

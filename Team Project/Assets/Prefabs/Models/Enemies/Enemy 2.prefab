@@ -212,7 +212,8 @@ MonoBehaviour:
   m_playerLayerMask:
     serializedVersion: 2
     m_Bits: 9
-  FOV: 90
+  FOV_LR: 0
+  FOV_UD: 0
   showDebugVisuals: 0
   agent: {fileID: 4514318907233043349}
   faceTargetSpeed: 40

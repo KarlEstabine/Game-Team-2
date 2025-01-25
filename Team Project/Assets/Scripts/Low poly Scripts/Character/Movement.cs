@@ -218,6 +218,11 @@ namespace InfimaGames.LowPolyShooterPack
             //World space velocity calculation. This allows us to add it to the rigidbody's velocity properly.
             movement = transform.TransformDirection(movement);
 
+            //////////
+            // Perform collision checks for each movement axis
+            movement = CheckCollisions(movement);
+
+
             float yVelocity = rigidBody.linearVelocity.y;
 
             // Apply custom gravity if not grounded
@@ -236,6 +241,36 @@ namespace InfimaGames.LowPolyShooterPack
             //Update Velocity.
             rigidBody.linearVelocity = new Vector3(movement.x, yVelocity, movement.z);
             //Velocity = new Vector3(movement.x, yVelocity, movement.z);
+        }
+
+        private Vector3 CheckCollisions(Vector3 movement)
+        {
+            // Player position and size for raycasting
+            Vector3 position = transform.position + Vector3.up * capsule.height / 2f;
+            float radius = capsule.radius / 3;
+
+            // Directions to check
+            Vector3[] directions =  {
+            Vector3.forward, Vector3.back,
+            Vector3.left, Vector3.right };
+
+            for (int i = 0; i < directions.Length; i++)
+            {
+                Vector3 dir = transform.TransformDirection(directions[i]);
+
+                // Cast a capsule to check for collisions in the direction of movement
+                if (Physics.CapsuleCast(position, position + Vector3.up * capsule.height / 2f, radius, dir, out RaycastHit hit, capsule.radius + 0.1f))
+                {
+                    // Check if the collision is blocking movement
+                    if (Vector3.Dot(movement.normalized, dir) > 0)
+                    {
+                        // Zero out the blocked direction
+                        movement -= Vector3.Project(movement, dir);
+                    }
+                }
+            }
+
+            return movement;
         }
 
         private void Jump()

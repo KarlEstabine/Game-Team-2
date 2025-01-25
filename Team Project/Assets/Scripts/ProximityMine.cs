@@ -22,12 +22,17 @@ public class ProximityMine : MonoBehaviour
     public float minTime = 0.05f;
     //Maximum time before the barrel explodes
     public float maxTime = 0.25f;
+    //The layers to ignore
+    public LayerMask ignorMask;
 
     [Header("Explosion Options")]
     //How far the explosion will reach
     public float explosionRadius = 12.5f;
     //How powerful the explosion is
     public float explosionForce = 4000.0f;
+
+    // If we want to draw gizmos
+    public bool drawGizmos;
 
     // Update is called once per frame
     void Update()
@@ -50,7 +55,7 @@ public class ProximityMine : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         // When a player or enemy enters the trigger radius, the mine activates
-        if (!explode && (other.CompareTag("Player") || other.CompareTag("Enemy")))
+        if (!explode && (other.CompareTag("Enemy") || other.CompareTag("Player")))
         {
             // When the mine is stepped on, it explodes 
             explode = true;
@@ -73,33 +78,41 @@ public class ProximityMine : MonoBehaviour
             if (rb != null)
                 rb.AddExplosionForce(explosionForce * 50, explosionPos, explosionRadius);
 
-            //If the mine explosion hit otheer mine with the tag "Proximity Mine"
-            if (hit.transform.tag == "Proximity Mine")
+            RaycastHit check;
+            Vector3 direction = hit.transform.position - transform.position;
+            if (Physics.Raycast(transform.position, direction, out check, explosionRadius, ~ignorMask))
             {
-                //Toggle "Take Damage" on mine object
-                hit.transform.gameObject.GetComponent<ProximityMine>().explode = true;
-            }
+                if (check.collider == hit)
+                {
+                    //If the mine explosion hit otheer mine with the tag "Proximity Mine"
+                    if (hit.transform.tag == "Proximity Mine")
+                    {
+                        //Toggle "Take Damage" on mine object
+                        hit.transform.gameObject.GetComponent<ProximityMine>().explode = true;
+                    }
 
-            //If the mine explosion hits the tag "ExplosiveBarrel"
-            if (hit.transform.tag == "ExplosiveBarrel")
-            {
-                //Toggle the explode bool on the explosive barrel object
-                hit.transform.gameObject.GetComponent<ExplosiveBarrelScript>().explode = true;
-            }
+                    //If the mine explosion hits the tag "ExplosiveBarrel"
+                    if (hit.transform.tag == "ExplosiveBarrel")
+                    {
+                        //Toggle the explode bool on the explosive barrel object
+                        hit.transform.gameObject.GetComponent<ExplosiveBarrelScript>().explode = true;
+                    }
 
-            //If the mine explosion hit the tag "Target"
-            if (hit.transform.tag == "Target")
-            {
-                //Toggle the isHit bool on the target object
-                hit.transform.gameObject.GetComponent<TargetScript>().isHit = true;
-            }
+                    //If the mine explosion hit the tag "Target"
+                    if (hit.transform.tag == "Target")
+                    {
+                        //Toggle the isHit bool on the target object
+                        hit.transform.gameObject.GetComponent<TargetScript>().isHit = true;
+                    }
 
-            //If the mine explosion hit the tag "GasTank"
-            if (hit.GetComponent<Collider>().tag == "GasTank")
-            {
-                //If gas tank is within radius, explode it
-                hit.gameObject.GetComponent<GasTankScript>().isHit = true;
-                hit.gameObject.GetComponent<GasTankScript>().explosionTimer = 0.05f;
+                    //If the mine explosion hit the tag "GasTank"
+                    if (hit.GetComponent<Collider>().tag == "GasTank")
+                    {
+                        //If gas tank is within radius, explode it
+                        hit.gameObject.GetComponent<GasTankScript>().isHit = true;
+                        hit.gameObject.GetComponent<GasTankScript>().explosionTimer = 0.05f;
+                    }
+                }
             }
 
             //If the mine explosion hit the tag "Enemy"
@@ -127,5 +140,13 @@ public class ProximityMine : MonoBehaviour
 
         //Destroy the current barrel object
         Destroy(gameObject);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!drawGizmos || this.enabled == false) return;
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, explosionRadius);
     }
 }

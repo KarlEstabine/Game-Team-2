@@ -22,7 +22,7 @@ public class EnemyAttack : MonoBehaviour
     private IEnumerator shoot()
     {
         isShooting = true;
-        yield return new WaitForSeconds(0.1f);
+        //yield return new WaitForSeconds(0.1f);
         Instantiate(bullet, shootPos.position, transform.rotation);
 
         yield return new WaitForSeconds(shootRate);

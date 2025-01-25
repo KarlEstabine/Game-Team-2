@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 5926714257800984507}
   - component: {fileID: 667492657838219207}
   - component: {fileID: 5837305077964722159}
-  m_Layer: 0
+  - component: {fileID: 2806713855739757330}
+  m_Layer: 17
   m_Name: Proximity Mine
   m_TagString: Proximity Mine
   m_Icon: {fileID: 0}
@@ -48,14 +49,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39c0b22ed5d711540a0469aa48fe29d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 50
   explosionDamage: 60
   explode: 0
   explosionPrefab: {fileID: 4296680985399300, guid: ca26d7307564ff848b29e32bbe6279ef, type: 3}
   minTime: 0.05
   maxTime: 0.25
+  ignorMask:
+    serializedVersion: 2
+    m_Bits: 0
   explosionRadius: 5
-  explosionForce: 400
+  explosionForce: 200
+  drawGizmos: 0
 --- !u!33 &5628009725264872707
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -149,6 +153,33 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &2806713855739757330
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030706716750036371}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0

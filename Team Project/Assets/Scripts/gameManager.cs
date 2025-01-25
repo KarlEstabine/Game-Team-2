@@ -1,26 +1,25 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using InfimaGames.LowPolyShooterPack;
 
 public class gameManager : MonoBehaviour
 {
     public static gameManager instance;
 
-    // UI Elements starting with menuPause and menuActive
+    [Header("Meunes And UI")]
     [SerializeField] GameObject menuActive;
-    [SerializeField] GameObject menuPause;
-    [SerializeField] GameObject menuWin;
-    [SerializeField] GameObject menuLose;
-
+    [SerializeField] GameObject menuPause, menuWin, menuLose;
+    [SerializeField] GameObject tutorialUI, weaponUI;
     [SerializeField] TMP_Text goalText;
-
-    public GameObject player;
-    public playerController playerScript;
-
     public GameObject damagePanel;
     public Image playerHPBar;
 
-    public bool isPaused;
+    [Header("Player Info")]
+    public GameObject player;
+    public Character playerScript;
+
+    bool isPaused;
 
     int goalCount;
 
@@ -29,7 +28,7 @@ public class gameManager : MonoBehaviour
     {
         instance = this;
         player = GameObject.FindWithTag("Player");
-        playerScript = player.GetComponent<playerController>();
+        playerScript = player.GetComponent<Character>();
     }
 
     // Update is called once per frame
@@ -59,6 +58,8 @@ public class gameManager : MonoBehaviour
         Cursor.visible = true;
         // Confines the cursor to the game window
         Cursor.lockState = CursorLockMode.Confined;
+        tutorialUI.SetActive(false);
+        weaponUI.SetActive(false);
     }
 
     public void StateUnpause()
@@ -73,6 +74,9 @@ public class gameManager : MonoBehaviour
   
         menuActive.SetActive(false);
         menuActive = null;
+
+        tutorialUI.SetActive(true);
+        weaponUI.SetActive(true);
     }
 
     public void UpdatedGameGoal(int amount)
@@ -89,6 +93,7 @@ public class gameManager : MonoBehaviour
             StatePause();
             menuActive = menuWin;
             menuActive.SetActive(true);
+            playerScript.cursorLocked = false;
         }
     }
 
@@ -98,5 +103,6 @@ public class gameManager : MonoBehaviour
         StatePause();
         menuActive = menuLose;
         menuActive.SetActive(true);
+        playerScript.cursorLocked = false;
     }
 }

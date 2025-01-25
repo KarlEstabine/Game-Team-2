@@ -40,8 +40,11 @@ public class GasTankScript : MonoBehaviour {
 	public float explosionRadius = 12.5f;
 	//How powerful the explosion is
 	public float explosionForce = 4000.0f;
+    //The layers to ignore
+    public LayerMask ignorMask;
+    
 
-	[Header("Light")]
+    [Header("Light")]
 	public Light lightObject;
 
 	[Header("Particle Systems")]
@@ -53,8 +56,11 @@ public class GasTankScript : MonoBehaviour {
 	public AudioSource impactSound;
 	//Used to check if the audio has played
 	bool audioHasPlayed = false;
-	
-	private void Start () {
+
+    // If we want to draw gizmos
+    public bool drawGizmos;
+
+    private void Start () {
 		//Make sure the light is off at start
 		lightObject.intensity = 0;
 		//Get a random value for the rotation
@@ -121,7 +127,7 @@ public class GasTankScript : MonoBehaviour {
 		
 		//Spawn the destroyed gas tank prefab
 		Instantiate (destroyedGasTankPrefab, transform.position, 
-		             transform.rotation); 
+		             transform.rotation);
 		
 		//Explosion force
 		Vector3 explosionPos = transform.position;
@@ -133,32 +139,40 @@ public class GasTankScript : MonoBehaviour {
 			//Add force to nearby rigidbodies
 			if (rb != null)
 				rb.AddExplosionForce (explosionForce * 50, explosionPos, explosionRadius);
-			
-			//If the gas tank explosion hits other gas tanks with the tag "GasTank"
-			if (hit.transform.tag == "GasTank") {
-				
-				//Toggle the isHit bool on the gas tank object
-				hit.transform.gameObject.GetComponent<GasTankScript>().isHit = true;
-			}
 
-            //If the gas tank explosion hit the tag "Target"
-            if (hit.transform.tag == "Target")
-            {
-                //Toggle the isHit bool on the target object
-                hit.transform.gameObject.GetComponent<TargetScript>().isHit = true;
-            }
+            RaycastHit check;
+            Vector3 direction = hit.transform.position - transform.position;
+			if (Physics.Raycast(transform.position, direction, out check, explosionRadius, ~ignorMask))
+			{
+				if (check.collider == hit)
+				{
+                    //If the gas tank explosion hits other gas tanks with the tag "GasTank"
+                    if (hit.transform.tag == "GasTank")
+                    {               //Toggle the isHit bool on the gas tank object
+                        hit.transform.gameObject.GetComponent<GasTankScript>().isHit = true;
+                    }
 
-            //If the gas tank explosion hits the tag "ExplosiveBarrel"
-            if (hit.transform.tag == "ExplosiveBarrel") {
-				//Toggle explode bool on explosive barrel object
-				hit.transform.gameObject.GetComponent<ExplosiveBarrelScript>().explode = true;
-			}
+                    //If the gas tank explosion hit the tag "Target"
+                    if (hit.transform.tag == "Target")
+                    {
+                        //Toggle the isHit bool on the target object
+                        hit.transform.gameObject.GetComponent<TargetScript>().isHit = true;
+                    }
 
-            //If the gas tank explosion hit the tag "Proximity Mine"
-            if (hit.transform.tag == "Proximity Mine")
-            {
-                //Toggle "Take Damage" on mine object
-                hit.transform.gameObject.GetComponent<ProximityMine>().explode = true;
+                    //If the gas tank explosion hits the tag "ExplosiveBarrel"
+                    if (hit.transform.tag == "ExplosiveBarrel")
+                    {
+                        //Toggle explode bool on explosive barrel object
+                        hit.transform.gameObject.GetComponent<ExplosiveBarrelScript>().explode = true;
+                    }
+
+                    //If the gas tank explosion hit the tag "Proximity Mine"
+                    if (hit.transform.tag == "Proximity Mine")
+                    {
+                        //Toggle "Take Damage" on mine object
+                        hit.transform.gameObject.GetComponent<ProximityMine>().explode = true;
+                    }
+                }
             }
 
             //If the gas tank explosion hit the tag "Enemy"
@@ -182,4 +196,12 @@ public class GasTankScript : MonoBehaviour {
 		//Destroy the current gas tank object
 		Destroy (gameObject);
 	}
+
+    private void OnDrawGizmos()
+    {
+        if (!drawGizmos || this.enabled == false) return;
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, explosionRadius);
+    }
 }
