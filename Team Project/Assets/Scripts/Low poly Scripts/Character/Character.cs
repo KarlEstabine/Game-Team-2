@@ -447,13 +447,18 @@ namespace InfimaGames.LowPolyShooterPack
 			const string boolName = "Holstered";
 			characterAnimator.SetBool(boolName, holstered);	
 		}
-		
-		#region ACTION CHECKS
 
-		/// <summary>
-		/// Can Fire.
-		/// </summary>
-		private bool CanPlayAnimationFire()
+        public void getGunStats(GunStats gun)
+        {
+
+        }
+
+        #region ACTION CHECKS
+
+        /// <summary>
+        /// Can Fire.
+        /// </summary>
+        private bool CanPlayAnimationFire()
 		{
 			//Block.
 			if (holstered || holstering)
