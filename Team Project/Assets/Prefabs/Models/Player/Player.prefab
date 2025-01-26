@@ -512,7 +512,7 @@ MonoBehaviour:
   jumpMax: 2
   jumpSpeed: 12
   gravity: 28
-  shootDamage: 5
+  shootDamage: 10
   shootDist: 8
   leanAngle: 25
   leanSpeed: 15

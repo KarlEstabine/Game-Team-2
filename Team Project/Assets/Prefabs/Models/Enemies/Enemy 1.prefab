@@ -917,11 +917,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 606043960697361602}
+  - component: {fileID: 7653879569752236754}
   - component: {fileID: 8755323520381922782}
+  - component: {fileID: 7823587774776049496}
+  - component: {fileID: 7122517557399836736}
+  - component: {fileID: 2889061873429045139}
   - component: {fileID: 7285469141588587248}
   - component: {fileID: 9135015955650627783}
   - component: {fileID: 166421082030112540}
-  - component: {fileID: 7730026104832671382}
   m_Layer: 0
   m_Name: Enemy 1
   m_TagString: Untagged
@@ -939,13 +942,88 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.25, y: 0, z: 10.75}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.85, y: 0.85, z: 0.85}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2401511671433105430}
   - {fileID: 3729144924787023227}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7653879569752236754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8610788986937267103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Graph: {fileID: 3935278898442656380, guid: a0614bbe646a45a4b84e0c68ccb6a1bd, type: 2}
+  m_BlackboardVariableOverridesList:
+  - rid: 9054222499108356415
+  - rid: 9054222499108356416
+  - rid: 9054222499108356417
+  - rid: 9054222499108356418
+  - rid: 9054222499108356419
+  - rid: 9054222499108356425
+  m_IsInitialised: 0
+  m_IsStarted: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 9054222499108356415
+      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 1
+          m_Value1: 0
+        Name: Self
+        m_Value: {fileID: 8610788986937267103}
+    - rid: 9054222499108356416
+      type: {class: 'BlackboardVariable`1[[RangeDetector, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 8087069455293499879
+          m_Value1: 7163229720318261499
+        Name: New Range Detector
+        m_Value: {fileID: 7122517557399836736}
+    - rid: 9054222499108356417
+      type: {class: 'BlackboardVariable`1[[EnemyAttack, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 4292399370964083054
+          m_Value1: 9693323287518422463
+        Name: New Enemy Attack
+        m_Value: {fileID: 2889061873429045139}
+    - rid: 9054222499108356418
+      type: {class: 'BlackboardVariable`1[[LineOfSightDetector, Assembly-CSharp]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 18224155380311160193
+          m_Value1: 1815038358910827103
+        Name: New Line Of Sight Detector
+        m_Value: {fileID: 7823587774776049496}
+    - rid: 9054222499108356419
+      type: {class: 'BlackboardVariable`1[[System.Collections.Generic.List`1[[UnityEngine.GameObject, UnityEngine.CoreModule]], mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 5055791449107499433
+          m_Value1: 7323371743757784625
+        Name: PatrollPoints
+        m_Value:
+        - {fileID: 0}
+        - {fileID: 0}
+    - rid: 9054222499108356425
+      type: {class: 'BlackboardVariable`1[[System.Int32, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
+      data:
+        GUID:
+          m_Value0: 3327751423302177861
+          m_Value1: 10931167344643457434
+        Name: AttackRange
+        m_Value: 8
 --- !u!114 &8755323520381922782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -958,17 +1036,62 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c6a38a6f6a0c1b4d94808333c32d5b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  model: {fileID: 2998045402729682009}
-  agent: {fileID: 7285469141588587248}
-  anim: {fileID: 9135015955650627783}
-  shootPos: {fileID: 4951827470459566479}
-  headPOS: {fileID: 8861812658965275765}
-  bullet: {fileID: 6131050754550736681, guid: 1b4b797db9265024ba42ac6f35a8f4ad, type: 3}
-  shootRate: 0.5
-  faceTargetSpeed: 8
-  FOV: 90
-  animeSpeedTrans: 8
   HP: 20
+  model: {fileID: 2998045402729682009}
+--- !u!114 &7823587774776049496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8610788986937267103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec595a192d2d29741b186f4cfdefe3a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_detectionHeight: 1
+  m_detectionRange: 29
+  m_playerLayerMask:
+    serializedVersion: 2
+    m_Bits: 9
+  FOV: 90
+  showDebugVisuals: 0
+  agent: {fileID: 7285469141588587248}
+  faceTargetSpeed: 40
+--- !u!114 &7122517557399836736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8610788986937267103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24fd8968a76ce164e95c90bb2faa60fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionRadius: 30
+  detectionMask:
+    serializedVersion: 2
+    m_Bits: 8
+  showDebugVisuals: 0
+--- !u!114 &2889061873429045139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8610788986937267103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e28c902d33cb0647940fe37f13605b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bullet: {fileID: 6131050754550736681, guid: 1b4b797db9265024ba42ac6f35a8f4ad, type: 3}
+  shootPos: {fileID: 4951827470459566479}
+  shootRate: 0.3
+  isShooting: 0
 --- !u!195 &7285469141588587248
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1036,27 +1159,6 @@ CapsuleCollider:
   m_Height: 2.75
   m_Direction: 1
   m_Center: {x: 0, y: 1.2, z: 0}
---- !u!135 &7730026104832671382
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8610788986937267103}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 20
-  m_Center: {x: 0, y: 1.5, z: 0}
 --- !u!1 &9100601992920647186
 GameObject:
   m_ObjectHideFlags: 0

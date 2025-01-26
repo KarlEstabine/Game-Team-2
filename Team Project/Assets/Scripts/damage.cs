@@ -1,3 +1,4 @@
+using InfimaGames.LowPolyShooterPack;
 using UnityEngine;
 
 public class damage : MonoBehaviour
@@ -29,14 +30,10 @@ public class damage : MonoBehaviour
     {
         if (other.isTrigger)
             return;
-            
 
-        IDamage dmg = other.GetComponent<IDamage>();
-
-        if (dmg != null)
-        {
-            dmg.takeDamage(damageAmount);
-        }
+   
+        other.gameObject.GetComponent<Character>()?.takeDamage(damageAmount);
+        
 
         if (type == DamageType.moving)
         {

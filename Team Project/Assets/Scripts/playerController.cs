@@ -112,8 +112,6 @@ public class playerController : MonoBehaviour, IDamage
             playerVel = Vector3.zero;
         }
 
-        Debug.Log(controller.isGrounded);
-
         // Get movement input and normalize direction
         moveDir = (Input.GetAxis("Horizontal") * transform.right) +
                   (Input.GetAxis("Vertical") * transform.forward).normalized;
