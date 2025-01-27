@@ -7,6 +7,7 @@ public class buttonFunctions : MonoBehaviour
     {
         // Unpause the game via resume button
         gameManager.instance.StateUnpause();
+        gameManager.instance.playerScript.cursorLocked = true;
     }
 
     public void Restart()
@@ -15,6 +16,7 @@ public class buttonFunctions : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         // Unpause the game
         gameManager.instance.StateUnpause();
+        gameManager.instance.playerScript.cursorLocked = true;
     }
 
     public void Quit()

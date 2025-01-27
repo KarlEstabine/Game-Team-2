@@ -15,8 +15,6 @@ public partial class AttackAction : Action
         // Start the attack if not already attacking
         Attack.Value.performAttack();
 
-        Debug.Log($"AttackAction: {Attack.Value.isShooting}");
-
         // Check if the enemy is still shooting
         if (!Attack.Value.isShooting)
         {
