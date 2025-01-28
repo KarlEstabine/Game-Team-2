@@ -33,8 +33,8 @@ public class enemyAI : MonoBehaviour, IDamage
     {
         colorOrig = model.material.color;
 
-        // Update the goal count
-        gameManager.instance.UpdatedGameGoal(1);
+        // Update the goal count in spawner now
+       // gameManager.instance.UpdatedGameGoal(1);
     }
 
     // Update is called once per frame

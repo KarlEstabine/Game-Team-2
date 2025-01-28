@@ -282,10 +282,10 @@ MonoBehaviour:
     m_Bits: 63
   HP: 60
   jumpMax: 2
-  jumpSpeed: 12
+  jumpSpeed: 14
   gravity: 28
   shootDamage: 5
-  shootDist: 8
+  shootDist: 16
   leanAngle: 25
   leanSpeed: 15
   dashSpeed: 10
@@ -2229,7 +2229,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sens: 300
-  lockVertMin: -45
+  lockVertMin: -60
   lockVertMax: 90
   invertY: 0
 --- !u!1 &8013480783344831549
