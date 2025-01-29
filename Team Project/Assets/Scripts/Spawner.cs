@@ -44,8 +44,12 @@ public class Spawner : MonoBehaviour
 
     void spawn()
     { //using spwawn count to have each enemy have its own position
-       // int spawnInt = Random.Range(0, spawnPos.Length);
-        Instantiate(objectToSpawn, spawnPos[spawnCount].position, spawnPos[spawnCount].rotation);
+      // int spawnInt = Random.Range(0, spawnPos.Length);
+        GameObject spawnedEnemy = Instantiate(objectToSpawn, spawnPos[spawnCount].position, spawnPos[spawnCount].rotation);
+
+        // Set the "Enemy" tag to the spawned enemy
+        spawnedEnemy.tag = "Enemy";
+
         spawnCount++;
         spawnTimer = 0;
     }
