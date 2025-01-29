@@ -6,17 +6,20 @@ using System.IO;
 
 public class playerController : MonoBehaviour, IDamage
 {
+    [Header("--- Components ---")]
+    [Space]
     [SerializeField] CharacterController controller;
-
     [SerializeField] LayerMask ignoreMask;
     [SerializeField] LayerMask groundMask;          // Layers considered "ground"
+
+    [Space]
+    [Header("--- Player Settings ---")]
+    [Space]
 
     [SerializeField] int HP;
     [SerializeField] int jumpMax;
     [SerializeField] int jumpSpeed;
     [SerializeField] int gravity;
-    [SerializeField] int shootDamage;
-    [SerializeField] int shootDist;
     [SerializeField] int leanAngle;
     [SerializeField] int leanSpeed;
 
@@ -41,7 +44,13 @@ public class playerController : MonoBehaviour, IDamage
     [SerializeField] LayerMask targetLayer;
     [SerializeField] int shockPushDamage = 5;
 
-
+    [Space]
+    [Header("--- Shooting Settings ---")]
+    [Space]
+    [SerializeField] int shootDamage;
+    [SerializeField] int shootDist;
+    [SerializeField] private float fireRate;
+    [SerializeField] GameObject gunModel;
 
     int HPOrig;
     int jumpCount;
@@ -61,6 +70,7 @@ public class playerController : MonoBehaviour, IDamage
     bool isDashing = false;
     bool isCrouching = false;
     bool isWallRunning = false;
+    private bool isShooting = false;
 
 
     Vector3 moveDir;
@@ -183,9 +193,9 @@ public class playerController : MonoBehaviour, IDamage
         playerVel.y -= gravity * Time.deltaTime;
 
         // Shooting logic
-        if (Input.GetButtonDown("Shoot"))
+        if (Input.GetButtonDown("Shoot") && !isShooting)
         {
-            shoot();
+            StartCoroutine(shoot());
         }
 
         if (controller.isGrounded)
@@ -266,8 +276,9 @@ public class playerController : MonoBehaviour, IDamage
         }
     }
 
-    void shoot()
+    private IEnumerator shoot()
     {
+        isShooting = true;
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreMask))
         {
@@ -279,6 +290,8 @@ public class playerController : MonoBehaviour, IDamage
                 dmg.takeDamage(shootDamage);
             }
         }
+        yield return new WaitForSeconds(fireRate);
+        isShooting = false;
     }
 
     public void takeDamage(int amount)
@@ -369,10 +382,6 @@ public class playerController : MonoBehaviour, IDamage
         dashTimeLeft = dashDuration;
         dashCooldownTimer = dashCooldown;
 
-<<<<<<< HEAD:Team Project/Assets/Scripts/playerController.cs
-        Vector3 cameraForward = Camera.main.transform.forward;
-        dashDir = cameraForward.normalized;
-=======
         // Get the player's input direction
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
@@ -383,7 +392,6 @@ public class playerController : MonoBehaviour, IDamage
         dashDir = dashDirection;
 
         Debug.Log($"Dash direction: {dashDir}");
->>>>>>> development:Team Project/Assets/Code/playerController.cs
     }
 
     void PerformDash()
@@ -501,6 +509,20 @@ public class playerController : MonoBehaviour, IDamage
             Gizmos.DrawWireSphere(transform.position, shockPushRange);
         }
     }
+
+    public void getGunStats(GunStats weapon)
+    {
+        shootDamage = weapon.shootDamage;
+        shootDist = weapon.shootDist;
+        fireRate = weapon.shootDist;
+        anim = weapon.animator;
+        gameManager.instance.weaponSprite = weapon.spriteBody;
+
+        gunModel.GetComponent<MeshFilter>().sharedMesh = weapon.weaponModel.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = weapon.weaponModel.GetComponent<MeshRenderer>().sharedMaterial;
+    }
+
 }
+
 
 
