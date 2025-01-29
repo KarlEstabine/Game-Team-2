@@ -119,9 +119,10 @@ MonoBehaviour:
   shootPos: {fileID: 5012850159385689193}
   headPOS: {fileID: 6892320861003370417}
   bullet: {fileID: 6131050754550736681, guid: 1b4b797db9265024ba42ac6f35a8f4ad, type: 3}
-  shootRate: 0.25
+  shootRate: 0.8
   faceTargetSpeed: 8
-  FOV: 90
+  sightFOV: 90
+  shootFOV: 30
   animeSpeedTrans: 8
   HP: 40
 --- !u!95 &3327923972409615707

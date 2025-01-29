@@ -65,9 +65,9 @@ MonoBehaviour:
   leanSpeed: 15
   sprintStaminaUse: 0.5
   groundCheckDistance: 0.2
-  dashSpeed: 10
-  dashDuration: 1
-  dashCooldown: 1
+  dashSpeed: 20
+  dashDuration: 0.5
+  dashCooldown: 2
   dashStaminaUse: 5
   crouchHeight: 0
   moveSpeed: 3

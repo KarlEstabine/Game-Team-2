@@ -58,8 +58,8 @@ MonoBehaviour:
   bullet: {fileID: 6131050754550736681, guid: 1b4b797db9265024ba42ac6f35a8f4ad, type: 3}
   shootRate: 0.25
   faceTargetSpeed: 10
-  sightFOV: 0
-  shootFOV: 0
+  sightFOV: 90
+  shootFOV: 30
   animeSpeedTrans: 8
   HP: 60
 --- !u!95 &8987095715576498684
