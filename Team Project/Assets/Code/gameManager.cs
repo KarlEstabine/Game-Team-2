@@ -19,6 +19,8 @@ public class gameManager : MonoBehaviour
 
     public GameObject damagePanel;
     public Image playerHPBar;
+    public Sprite weaponSprite;
+
 
     public bool isPaused;
 
