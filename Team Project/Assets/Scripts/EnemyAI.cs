@@ -14,7 +14,7 @@ public class EnemyAI : MonoBehaviour, IDamage
     [SerializeField] float shootRate;
     [SerializeField] int faceTargetSpeed;
 
-    [SerializeField] int FOV;
+    [SerializeField] int sightFOV, shootFOV;
     [SerializeField] int animeSpeedTrans;
 
     [SerializeField] int HP;
@@ -27,7 +27,7 @@ public class EnemyAI : MonoBehaviour, IDamage
     Color colorOrig;
 
     Vector3 playerDir;
-
+    Vector3 height = new Vector3(0, 1.2f, 0);
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -55,13 +55,13 @@ public class EnemyAI : MonoBehaviour, IDamage
     {
         playerDir = GameManager.instance.player.transform.position - headPOS.position;
         angleToPlayer = Vector3.Angle(playerDir, transform.forward);
-
-        Debug.DrawRay(headPOS.position, playerDir);
+        
+        Debug.DrawRay(headPOS.position, playerDir + height);
 
         RaycastHit hit;
-        if (Physics.Raycast(headPOS.position, playerDir, out hit))
+        if (Physics.Raycast(headPOS.position, playerDir + height, out hit))
         {
-            if (hit.collider.CompareTag("Player") && angleToPlayer <= FOV)
+            if (hit.collider.CompareTag("Player") && angleToPlayer <= sightFOV)
             {
                 agent.SetDestination(GameManager.instance.player.transform.position);
 
@@ -72,7 +72,11 @@ public class EnemyAI : MonoBehaviour, IDamage
 
                 if (!isShooting)
                 {
-                    StartCoroutine(shoot());
+                    if (angleToPlayer <= shootFOV)
+                    {
+                        StartCoroutine(shoot());
+                    }
+                    
                 }
                 return true;
             }
@@ -125,8 +129,9 @@ public class EnemyAI : MonoBehaviour, IDamage
 
     IEnumerator shoot()
     {
+        Quaternion playerRot = Quaternion.LookRotation(playerDir + height);
         isShooting = true;
-        Instantiate(bullet, shootPos.position, transform.rotation);
+        Instantiate(bullet, shootPos.position, playerRot );
 
         yield return new WaitForSeconds(shootRate);
         isShooting = false;
