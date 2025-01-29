@@ -11,6 +11,7 @@ public class GunStats : ScriptableObject
     public int shootDamage;
     public int shootDist;
     public int ammoCur, ammoMax, totalMags;
+    public float shootRate;
 
     [Header("--- Effects ---")]
     [Space]
@@ -25,8 +26,8 @@ public class GunStats : ScriptableObject
     public AudioClip audioClipReload;
     public AudioClip audioClipReloadEmpty;
     public AudioClip audioClipFireEmpty;
-    [Space]
+    //[Space]
 
-    public Animator animator;
-    public Sprite spriteBody;
+    //public Animator animator;
+    //public Sprite spriteBody;
 }

@@ -3,9 +3,13 @@ using Unity.Mathematics;
 using UnityEngine.InputSystem;
 using System.Collections;
 using System.IO;
+<<<<<<< HEAD
+using System;
+using NUnit.Framework.Internal.Commands;
+=======
 using NUnit.Framework;
 using System.Collections.Generic;
-using NUnit.Framework.Internal.Commands;
+>>>>>>> feature/weaponPickups
 
 public class PlayerController : MonoBehaviour, IDamage, IPickup
 {
@@ -51,10 +55,16 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Space]
     [Header("--- Shooting Settings ---")]
     [Space]
+<<<<<<< HEAD
+    int shootDamage;
+    int shootDist;
+    private float fireRate;
+=======
     [SerializeField] List<GunStats> gunList = new List<GunStats>();
     [SerializeField] int shootDamage;
     [SerializeField] int shootDist;
     [SerializeField] private float fireRate;
+>>>>>>> feature/weaponPickups
     [SerializeField] GameObject gunModel;
 
     int HPOrig;

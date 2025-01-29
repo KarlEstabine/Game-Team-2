@@ -3,11 +3,10 @@ using Unity.Mathematics;
 using UnityEngine.InputSystem;
 using System.Collections;
 using System.IO;
-using NUnit.Framework;
-using System.Collections.Generic;
+using System;
 using NUnit.Framework.Internal.Commands;
 
-public class PlayerController : MonoBehaviour, IDamage, IPickup
+public class PlayerController : MonoBehaviour, IDamage
 {
     [Header("--- Components ---")]
     [Space]
@@ -51,16 +50,14 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
     [Space]
     [Header("--- Shooting Settings ---")]
     [Space]
-    [SerializeField] List<GunStats> gunList = new List<GunStats>();
-    [SerializeField] int shootDamage;
-    [SerializeField] int shootDist;
-    [SerializeField] private float fireRate;
+    int shootDamage;
+    int shootDist;
+    private float fireRate;
     [SerializeField] GameObject gunModel;
 
     int HPOrig;
     float staminaOrig;
     int jumpCount;
-    int gunListPos;
 
     float currentLean;
     float originalCameraHeight;
@@ -107,7 +104,6 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
         sprint();
         dashInput();
         shockPushInput();
-        selectWeapon();
 
         updateAnimator();
         UpdateDashCooldown();
@@ -474,37 +470,14 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     public void getGunStats(GunStats weapon)
     {
-        gunList.Add(weapon);
-        gunListPos = gunList.Count - 1;
+        shootDamage = weapon.shootDamage;
+        shootDist = weapon.shootDist;
+        fireRate = weapon.shootDist;
+        anim = weapon.animator;
+        GameManager.instance.weaponSprite = weapon.spriteBody;
 
-        changeWeapon();
-    }
-
-    void selectWeapon()
-    {
-        if (Input.GetAxis("Mouse ScrollWheel") > 0 && gunListPos < gunList.Count - 1)
-        {
-            gunListPos++;
-            changeWeapon();
-        }
-        if (Input.GetAxis("Mouse ScrollWheel") < 0 && gunListPos > 0)
-        {
-            gunListPos--;
-            changeWeapon();
-        }
-    }
-
-    void changeWeapon()
-    {
-        shootDamage = gunList[gunListPos].shootDamage;
-        shootDist = gunList[gunListPos].shootDist;
-        fireRate = gunList[gunListPos].shootRate;
-
-        //anim = weapon.animator;
-        //GameManager.instance.weaponSprite = weapon.spriteBody;
-
-        gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].weaponModel.GetComponent<MeshFilter>().sharedMesh;
-        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].weaponModel.GetComponent<MeshRenderer>().sharedMaterial;
+        gunModel.GetComponent<MeshFilter>().sharedMesh = weapon.weaponModel.GetComponent<MeshFilter>().sharedMesh;
+        gunModel.GetComponent<MeshRenderer>().sharedMaterial = weapon.weaponModel.GetComponent<MeshRenderer>().sharedMaterial;
     }
 
 }

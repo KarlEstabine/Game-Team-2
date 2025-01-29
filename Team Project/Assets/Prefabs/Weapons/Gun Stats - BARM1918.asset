@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e250fb617c1b53740ae2eddf4d736305, type: 3}
+  m_Name: Gun Stats - BARM1918
+  m_EditorClassIdentifier: 
+  weaponModel: {fileID: 5534874847616532687, guid: c08bd372cdff847d4be9a9d20c094ac2, type: 3}
+  shootDamage: 1
+  shootDist: 150
+  ammoCur: 0
+  ammoMax: 25
+  totalMags: 0
+  shootRate: 0.25
+  hitEffect: {fileID: 0}
+  shootSound: []
+  shootSoundVol: 0
+  audioClipHolster: {fileID: 0}
+  audioClipUnholster: {fileID: 0}
+  audioClipReload: {fileID: 0}
+  audioClipReloadEmpty: {fileID: 0}
+  audioClipFireEmpty: {fileID: 0}
+  animator: {fileID: 0}
+  spriteBody: {fileID: 0}
