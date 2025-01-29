@@ -51,7 +51,6 @@ MonoBehaviour:
   ignoreMask:
     serializedVersion: 2
     m_Bits: 8
-  groundCheckDistance: 0.2
   groundMask:
     serializedVersion: 2
     m_Bits: 63
@@ -59,15 +58,30 @@ MonoBehaviour:
   jumpMax: 2
   jumpSpeed: 12
   gravity: 28
-  shootDamage: 5
-  shootDist: 8
   leanAngle: 25
   leanSpeed: 15
+  groundCheckDistance: 0.2
   dashSpeed: 10
   dashDuration: 1
   dashCooldown: 1
+  crouchHeight: 0
   moveSpeed: 8
   speedMult: 1.25
+  wallRunGravity: 2
+  wallRunSpeed: 7
+  wallCheckDistance: 1
+  maxWallRunTime: 1.5
+  shockPushRange: 10
+  shockPushStrength: 5
+  shockPushCooldown: 5
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  shockPushDamage: 5
+  shootDamage: 5
+  shootDist: 8
+  fireRate: 0
+  gunModel: {fileID: 0}
 --- !u!143 &7052079389557616458
 CharacterController:
   m_ObjectHideFlags: 0

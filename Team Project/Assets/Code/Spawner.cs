@@ -4,7 +4,7 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     [SerializeField] GameObject objectToSpawn;
-    [SerializeField] int numToSpawn;
+   // [SerializeField] int numToSpawn;   Since this spawner is designed to spawn one enemy at each location we just need the number of locations
     [SerializeField] int timeBetweenSpawns;
     [SerializeField] Transform[] spawnPos;
 
@@ -17,7 +17,8 @@ public class Spawner : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        gameManager.instance.UpdatedGameGoal(numToSpawn);
+        
+        gameManager.instance.UpdatedGameGoal(spawnPos.Length);
     }
 
     // Update is called once per frame
@@ -27,7 +28,7 @@ public class Spawner : MonoBehaviour
         if (startSpawning)
         {
             spawnTimer += Time.deltaTime;
-            if (spawnCount < numToSpawn && spawnTimer >= timeBetweenSpawns)
+            if (spawnCount < spawnPos.Length && spawnTimer >= timeBetweenSpawns)
             {
                 spawn();
             }
@@ -51,6 +52,7 @@ public class Spawner : MonoBehaviour
         spawnedEnemy.tag = "Enemy";
 
         spawnCount++;
+       
         spawnTimer = 0;
     }
 
