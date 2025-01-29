@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     public PlayerController playerScript;       // Reference to player's controller script
     public GameObject damagePanel;              // UI feedback when the player takes damage
     public Image playerHPBar;                   // player health bar
+    public Image playerStaminaBar;              // player stamina bar
     public Sprite weaponSprite;                 // sprite representing the player's weapon
 
     // ==================== Game State ====================
