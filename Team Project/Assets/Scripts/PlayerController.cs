@@ -3,6 +3,8 @@ using Unity.Mathematics;
 using UnityEngine.InputSystem;
 using System.Collections;
 using System.IO;
+using System;
+using NUnit.Framework.Internal.Commands;
 
 public class PlayerController : MonoBehaviour, IDamage
 {
@@ -16,43 +18,45 @@ public class PlayerController : MonoBehaviour, IDamage
     [Header("--- Player Settings ---")]
     [Space]
 
-    [SerializeField] int HP;
-    [SerializeField] int jumpMax;
-    [SerializeField] int jumpSpeed;
-    [SerializeField] int gravity;
-    [SerializeField] int leanAngle;
-    [SerializeField] int leanSpeed;
+    [Range(1, 10)] [SerializeField] int HP;
+    [Range(1, 100)] [SerializeField] float stamina;
+    [Range(0, 10)][SerializeField] float staminaRegen;
+    [Range(1, 2)] [SerializeField] int jumpMax;
+    [Range(0, 5)][SerializeField] int jumpStaminaUse;
+    [Range(1, 10)] [SerializeField] int jumpSpeed;
+    [Range(15, 45)] [SerializeField] int gravity;
+    [Range(15, 45)] [SerializeField] int leanAngle;
+    [Range(1, 50)] [SerializeField] int leanSpeed;
+    [Range(0, 5)] [SerializeField] float sprintStaminaUse;
 
-    [SerializeField] float groundCheckDistance;     // Distance to check for ground
-    [SerializeField] float dashSpeed;
-    [SerializeField] float dashDuration;
-    [SerializeField] float dashCooldown;
+    [SerializeField] float groundCheckDistance;
+    [Range(2, 20)] [SerializeField] float dashSpeed;
+    [Range(0, 10)] [SerializeField] float dashDuration;
+    [Range(0, 10)] [SerializeField] float dashCooldown;
+    [Range(0, 5)] [SerializeField] float dashStaminaUse;
 
-    [SerializeField] float crouchHeight;
-    [SerializeField] float moveSpeed;
-    [SerializeField] float speedMult;
+    [Range(0, 5)] [SerializeField] float crouchHeight;
+    [Range(1, 10)] [SerializeField] float moveSpeed;
+    [Range(0, 10)] [SerializeField] float speedMult;
 
-    [SerializeField] float wallRunGravity = 2f;
-    [SerializeField] float wallRunSpeed = 7f;
-    [SerializeField] float wallCheckDistance = 1f;
-    [SerializeField] float maxWallRunTime = 1.5f;
-
-    [SerializeField] float shockPushRange = 10f;
-    [SerializeField] float shockPushStrength = 5f;
-    [SerializeField] float shockPushCooldown = 5f;
-    private float shockPushCooldownTimer = 0f;
+    [Header("--- Shock Push Settings ---")]
+    [Range(1, 20)] [SerializeField] float shockPushRange;
+    [Range(1, 10)] [SerializeField] float shockPushStrength;
+    [Range(0, 5)] [SerializeField] float shockPushCooldown;
+    private float shockPushCooldownTimer;
     [SerializeField] LayerMask targetLayer;
-    [SerializeField] int shockPushDamage = 5;
+    [Range(1,10)] [SerializeField] int shockPushDamage;
 
     [Space]
     [Header("--- Shooting Settings ---")]
     [Space]
-    [SerializeField] int shootDamage;
-    [SerializeField] int shootDist;
-    [SerializeField] private float fireRate;
+    int shootDamage;
+    int shootDist;
+    private float fireRate;
     [SerializeField] GameObject gunModel;
 
     int HPOrig;
+    float staminaOrig;
     int jumpCount;
 
     float currentLean;
@@ -61,21 +65,17 @@ public class PlayerController : MonoBehaviour, IDamage
     float originalControllerHeight;
     float dashTimeLeft;
     float dashCooldownTimer;
-    float wallRunTimer;
-   
 
     bool isSprinting;
     bool isLeaningRight;
     bool isLeaningLeft;
-    bool isDashing = false;
-    bool isCrouching = false;
-    bool isWallRunning = false;
-    private bool isShooting = false;
+    bool isDashing;
+    bool isCrouching;
+    private bool isShooting;
 
 
     Vector3 moveDir;
     Vector3 playerVel;
-    Vector3 lastWallNormal;
 
     Vector3 dashDir;
 
@@ -86,6 +86,7 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         anim = GetComponentInChildren<Animator>();
         HPOrig = HP;
+        staminaOrig = stamina;
         UpdatePlayerUI();
 
         originalCameraHeight = Camera.main.transform.localPosition.y;
@@ -98,6 +99,7 @@ public class PlayerController : MonoBehaviour, IDamage
     {
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.red);
 
+        HandleStaminaRegeneration();
         move();
         sprint();
         dashInput();
@@ -107,7 +109,14 @@ public class PlayerController : MonoBehaviour, IDamage
         UpdateDashCooldown();
         handleLean();
         handleCrouch();
-
+    }
+    void HandleStaminaRegeneration()
+    {
+        if (!isSprinting && !isDashing)
+        {
+            stamina = Mathf.Min(stamina + staminaRegen * Time.deltaTime, staminaOrig);
+            UpdatePlayerUI();
+        }
     }
 
     void handleCrouch()
@@ -175,86 +184,49 @@ public class PlayerController : MonoBehaviour, IDamage
         if (controller.isGrounded)
         {
             jumpCount = 0;
-            playerVel = Vector3.zero;
+            playerVel.y = -gravity * Time.deltaTime;
         }
 
         // Get movement input and normalize direction
         moveDir = (Input.GetAxis("Horizontal") * transform.right) +
                   (Input.GetAxis("Vertical") * transform.forward).normalized;
-
-        // Apply movement
-        controller.Move(moveDir * moveSpeed * Time.deltaTime);
-
+        controller.Move(moveDir * moveSpeed * Time.deltaTime); 
+        
         // Handle jumping
         jump();
-
         // Apply vertical velocity (gravity or jump)
         controller.Move(playerVel * Time.deltaTime);
         playerVel.y -= gravity * Time.deltaTime;
+
+
 
         // Shooting logic
         if (Input.GetButtonDown("Shoot") && !isShooting)
         {
             StartCoroutine(shoot());
         }
+    }
 
-        if (controller.isGrounded)
-        {
-            jumpCount = 0;
-            playerVel = Vector3.zero;
-            isWallRunning = false;
-        }
-        // Wall running logic
-        if (checkWall(out Vector3 wallNormal) && isSprinting && Input.GetAxis("Vertical") > 0)
-        {
-            if (!isWallRunning)
-            {
-                StartWallRun(wallNormal);
-            }
-
-            if (wallRunTimer > 0)
-            {
-                controller.Move(transform.forward * wallRunSpeed * Time.deltaTime);
-                playerVel.y = -wallRunGravity * Time.deltaTime; // Apply reduced gravity
-                wallRunTimer -= Time.deltaTime;
-            }
-            else
-            {
-                isWallRunning = false; // Stop wall run when time expires
-            }
-        }
-        else
-        {
-            isWallRunning = false;
-        }
-
-        // Normal movement
-        moveDir = (Input.GetAxis("Horizontal") * transform.right) +
-                  (Input.GetAxis("Vertical") * transform.forward).normalized;
-
-        controller.Move(moveDir * moveSpeed * Time.deltaTime);
-
-        // Jump handling
-        jump();
-
-        // Apply gravity if not wall running
-        if (!isWallRunning)
-        {
-            playerVel.y -= gravity * Time.deltaTime;
-        }
-
-        controller.Move(playerVel * Time.deltaTime);
+    public void staminaUse(float amount)
+    {
+        stamina -= amount;
+        stamina = Mathf.Clamp(stamina, 0, staminaOrig);
+        UpdatePlayerUI();
     }
 
     void sprint()
     {
-        if (Input.GetButtonDown("Sprint"))
+        if (Input.GetButton("Sprint") && stamina >= sprintStaminaUse)
         {
-            stand();
-            moveSpeed *= speedMult;
-            isSprinting = true;
+            if (!isSprinting)
+            {
+                stand();
+                moveSpeed *= speedMult;
+                isSprinting = true;
+            }
+            staminaUse(sprintStaminaUse * Time.deltaTime);
         }
-        else if (Input.GetButtonUp("Sprint"))
+        else if(isSprinting)
         {
             moveSpeed /= speedMult;
             isSprinting = false;
@@ -263,16 +235,21 @@ public class PlayerController : MonoBehaviour, IDamage
 
     void jump()
     {
-        if (Input.GetButtonDown("Jump") && jumpCount < jumpMax)
+        if(controller.isGrounded)
+        {
+            jumpCount = 0;
+            playerVel.y = -gravity * Time.deltaTime;
+        }
+        else
+        {
+            playerVel.y -= gravity * Time.deltaTime;
+        }
+        if (Input.GetButtonDown("Jump") && jumpCount < jumpMax && stamina >= jumpStaminaUse)
         {
             stand();
             jumpCount++;
             playerVel.y = jumpSpeed;
-        }
-        else if (isWallRunning)
-        {
-            isWallRunning = false;
-            playerVel = lastWallNormal * 5f + Vector3.up * (float)jumpSpeed;
+            staminaUse(jumpStaminaUse);
         }
     }
 
@@ -282,13 +259,13 @@ public class PlayerController : MonoBehaviour, IDamage
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreMask))
         {
-            Debug.Log(hit.collider.name);
 
             IDamage dmg = hit.collider.GetComponent<IDamage>();
             if (dmg != null && !hit.collider.isTrigger)
             {
                 dmg.takeDamage(shootDamage);
             }
+
         }
         yield return new WaitForSeconds(fireRate);
         isShooting = false;
@@ -365,7 +342,7 @@ public class PlayerController : MonoBehaviour, IDamage
 
     void dashInput()
     {
-        if (Input.GetButtonDown("Dash") && dashCooldownTimer <= 0 && !isDashing)
+        if (Input.GetButtonDown("Dash") && dashCooldownTimer <= 0 && !isDashing && stamina >= dashStaminaUse)
         {
             StartDash();
         }
@@ -378,20 +355,23 @@ public class PlayerController : MonoBehaviour, IDamage
 
     void StartDash()
     {
-        isDashing = true;
-        dashTimeLeft = dashDuration;
-        dashCooldownTimer = dashCooldown;
+        if (stamina >= dashStaminaUse)
+        {
+            isDashing = true;
+            dashTimeLeft = dashDuration;
+            dashCooldownTimer = dashCooldown;
 
-        // Get the player's input direction
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
-        Vector3 cameraForward = Camera.main.transform.forward;
-        // Combine input direction with camera's forward and right directions
-        Vector3 dashDirection = (cameraForward * verticalInput + Camera.main.transform.right * horizontalInput).normalized;
+            // Get the player's input direction
+            float horizontalInput = Input.GetAxis("Horizontal");
+            float verticalInput = Input.GetAxis("Vertical");
+            Vector3 cameraForward = Camera.main.transform.forward;
+            // Combine input direction with camera's forward and right directions
+            Vector3 dashDirection = (cameraForward * verticalInput + Camera.main.transform.right * horizontalInput).normalized;
 
-        dashDir = dashDirection;
+            dashDir = dashDirection;
 
-        Debug.Log($"Dash direction: {dashDir}");
+            staminaUse(dashStaminaUse);
+        }
     }
 
     void PerformDash()
@@ -413,29 +393,6 @@ public class PlayerController : MonoBehaviour, IDamage
         {
             dashCooldownTimer -= Time.deltaTime;
         }
-    }
-
-    bool checkWall(out Vector3 wallNormal)
-    {
-        RaycastHit hit;
-        bool wallLeft = Physics.Raycast(transform.position, -transform.right, out hit, wallCheckDistance, groundMask);
-        bool wallRight = Physics.Raycast(transform.position, transform.right, out hit, wallCheckDistance, groundMask);
-        if (wallLeft || wallRight)
-        {
-            wallNormal = hit.normal;
-            return true;
-        }
-        wallNormal = Vector3.zero;
-        return false;
-    }
-
-    void StartWallRun(Vector3 wallNormal)
-    {
-        isWallRunning = true;
-        wallRunTimer = maxWallRunTime;
-        lastWallNormal = wallNormal;
-
-        playerVel = Vector3.zero; // cancel falling effect
     }
 
     void shockPushInput()
@@ -523,6 +480,3 @@ public class PlayerController : MonoBehaviour, IDamage
     }
 
 }
-
-
-
