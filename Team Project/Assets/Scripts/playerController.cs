@@ -309,15 +309,18 @@ public class playerController : MonoBehaviour, IDamage
         dashTimeLeft = dashDuration;
         dashCooldownTimer = dashCooldown;
 
-        Vector3 cameraForward =Camera.main.transform.forward;
-   
-        dashDir = cameraForward.normalized;
+        // Get the player's input direction
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+        Vector3 cameraForward = Camera.main.transform.forward;
+        // Combine input direction with camera's forward and right directions
+        Vector3 dashDirection = (cameraForward * verticalInput + Camera.main.transform.right * horizontalInput).normalized;
 
+        dashDir = dashDirection;
 
         Debug.Log($"Dash direction: {dashDir}");
-
-
     }
+
     void PerformDash()
     {
         if (dashTimeLeft >0)
