@@ -2,47 +2,47 @@ using UnityEngine;
 using Unity.Mathematics;
 using UnityEngine.InputSystem;
 using System.Collections;
+using System.IO;
 
 public class playerController : MonoBehaviour, IDamage
 {
     [SerializeField] CharacterController controller;
-    [SerializeField] LayerMask ignoreMask;
 
-    [SerializeField] float groundCheckDistance;     // Distance to check for ground
+    [SerializeField] LayerMask ignoreMask;
     [SerializeField] LayerMask groundMask;          // Layers considered "ground"
 
     [SerializeField] int HP;
     [SerializeField] int jumpMax;
     [SerializeField] int jumpSpeed;
     [SerializeField] int gravity;
-
     [SerializeField] int shootDamage;
     [SerializeField] int shootDist;
-
     [SerializeField] int leanAngle;
     [SerializeField] int leanSpeed;
 
+    [SerializeField] float groundCheckDistance;     // Distance to check for ground
     [SerializeField] float dashSpeed;
     [SerializeField] float dashDuration;
     [SerializeField] float dashCooldown;
+    [SerializeField] float crouchHeight;
+    [SerializeField] float moveSpeed;
+    [SerializeField] float speedMult;
 
     int HPOrig;
     int jumpCount;
 
     float currentLean;
-
-    [SerializeField] float moveSpeed;
-    [SerializeField] float speedMult;
-
-    bool isSprinting;
-
-    bool isLeaningRight;
-    bool isLeaningLeft;
-
-    bool isDashing = false;
-
+    float originalCameraHeight;
+    float originalmoveSpeed;
+    float originalControllerHeight;
     float dashTimeLeft;
     float dashCooldownTimer;
+
+    bool isSprinting;
+    bool isLeaningRight;
+    bool isLeaningLeft;
+    bool isDashing = false;
+    bool isCrouching = false;
 
     Vector3 moveDir;
     Vector3 playerVel;
@@ -58,6 +58,10 @@ public class playerController : MonoBehaviour, IDamage
         anim = GetComponent<Animator>();
         HPOrig = HP;
         UpdatePlayerUI();
+
+        originalCameraHeight = Camera.main.transform.localPosition.y;
+        originalmoveSpeed = moveSpeed;
+        originalControllerHeight = controller.height;
     }
 
     // Update is called once per frame
@@ -72,6 +76,38 @@ public class playerController : MonoBehaviour, IDamage
         updateAnimator();
         UpdateDashCooldown();
         handleLean();
+        handleCrouch();
+    }
+
+    void handleCrouch()
+    {
+        if (Input.GetButtonDown("Crouch") && !isSprinting)
+        {
+            if (!isCrouching)
+            {
+                crouch();
+            }
+            else
+            {
+                stand();
+            }
+        }
+    }
+
+    void crouch()
+    {
+        isCrouching = true;
+        Camera.main.transform.localPosition = new Vector3(Camera.main.transform.localPosition.x, Camera.main.transform.localPosition.y / 2, Camera.main.transform.localPosition.z);
+        moveSpeed = moveSpeed / 2;
+        controller.height = controller.height * crouchHeight;
+    }
+
+    void stand()
+    {
+        isCrouching = false;
+        Camera.main.transform.localPosition = new Vector3(Camera.main.transform.localPosition.x, originalCameraHeight, Camera.main.transform.localPosition.z);
+        moveSpeed = originalmoveSpeed;
+        controller.height = originalControllerHeight;
     }
 
     void handleLean()
@@ -140,6 +176,7 @@ public class playerController : MonoBehaviour, IDamage
     {
         if (Input.GetButtonDown("Sprint"))
         {
+            stand();
             moveSpeed *= speedMult;
             isSprinting = true;
         }
@@ -154,9 +191,9 @@ public class playerController : MonoBehaviour, IDamage
     {
         if (Input.GetButtonDown("Jump") && jumpCount < jumpMax)
         {
+            stand();
             jumpCount++;
             playerVel.y = jumpSpeed;
-
         }
     }
 
