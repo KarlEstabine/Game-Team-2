@@ -2,10 +2,8 @@ using UnityEngine;
 using Unity.Mathematics;
 using UnityEngine.InputSystem;
 using System.Collections;
-using System.IO;
-using NUnit.Framework;
 using System.Collections.Generic;
-using NUnit.Framework.Internal.Commands;
+
 
 public class PlayerController : MonoBehaviour, IDamage, IPickup
 {
