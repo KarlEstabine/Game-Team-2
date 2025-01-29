@@ -54,23 +54,24 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 63
-  HP: 60
+  HP: 10
+  stamina: 50
+  staminaRegen: 5
   jumpMax: 2
-  jumpSpeed: 12
-  gravity: 28
+  jumpStaminaUse: 1
+  jumpSpeed: 10
+  gravity: 15
   leanAngle: 25
   leanSpeed: 15
+  sprintStaminaUse: 0.5
   groundCheckDistance: 0.2
   dashSpeed: 10
   dashDuration: 1
   dashCooldown: 1
+  dashStaminaUse: 5
   crouchHeight: 0
-  moveSpeed: 8
-  speedMult: 1.25
-  wallRunGravity: 2
-  wallRunSpeed: 7
-  wallCheckDistance: 1
-  maxWallRunTime: 1.5
+  moveSpeed: 3
+  speedMult: 2
   shockPushRange: 10
   shockPushStrength: 5
   shockPushCooldown: 5
@@ -78,9 +79,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   shockPushDamage: 5
-  shootDamage: 5
-  shootDist: 8
-  fireRate: 0
   gunModel: {fileID: 0}
 --- !u!143 &7052079389557616458
 CharacterController:
