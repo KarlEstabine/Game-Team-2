@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
     public Image playerHPBar;                   // player health bar
     public Image playerStaminaBar;              // player stamina bar
     public Sprite weaponSprite;                 // sprite representing the player's weapon
+    public GameObject butttonInteract;
+    public TMP_Text buttonInfo;
 
     // ==================== Game State ====================
     [Header("Game State")]

@@ -5,7 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-public class PlayerController : MonoBehaviour, IDamage, IPickup
+public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
 {
     [Header("--- Components ---")]
     [Space]
