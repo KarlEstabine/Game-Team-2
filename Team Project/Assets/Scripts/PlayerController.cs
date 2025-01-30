@@ -308,33 +308,33 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup
 
     void updateAnimator()
     {
-        Vector3 localMoveDir = transform.InverseTransformDirection(moveDir);
+        //Vector3 localMoveDir = transform.InverseTransformDirection(moveDir);
 
-        if (moveDir != Vector3.zero)
-        {
-            anim.SetBool("Walking", true);
+        //if (moveDir != Vector3.zero)
+        //{
+        //    anim.SetBool("Walking", true);
 
-            // Update MoveX and MoveY based on local direction
+        //    // Update MoveX and MoveY based on local direction
 
-            anim.SetFloat("MoveX", localMoveDir.x);
-            anim.SetFloat("MoveY", localMoveDir.z);
-        }
-        else
-        {
-            anim.SetBool("Walking", false);
-        }
+        //    anim.SetFloat("MoveX", localMoveDir.x);
+        //    anim.SetFloat("MoveY", localMoveDir.z);
+        //}
+        //else
+        //{
+        //    anim.SetBool("Walking", false);
+        //}
 
-        // Update running animation
-        anim.SetBool("Running", isSprinting);
+        //// Update running animation
+        //anim.SetBool("Running", isSprinting);
 
-        // Update jumping animation
-        anim.SetBool("Jumping", playerVel.y > 0);
+        //// Update jumping animation
+        //anim.SetBool("Jumping", playerVel.y > 0);
 
-        // Update falling animation
-        anim.SetBool("Falling", playerVel.y < -0.2);
+        //// Update falling animation
+        //anim.SetBool("Falling", playerVel.y < -0.2);
 
-        // Update landing animation
-        anim.SetBool("Landed", IsGrounded());
+        //// Update landing animation
+        //anim.SetBool("Landed", IsGrounded());
     }
 
     bool IsGrounded()
