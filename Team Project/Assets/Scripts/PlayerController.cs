@@ -7,6 +7,8 @@ using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
 {
+    #region Variables
+
     [Header("--- Components ---")]
     [Space]
     [SerializeField] CharacterController controller;
@@ -15,29 +17,40 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
 
     [Space]
     [Header("--- Player Settings ---")]
-    [Space]
-
+    [Header("Health"), Space]
     [Range(1, 10)] [SerializeField] int HP;
+
+    [Space, Header("Stamina")]
     [Range(1, 100)] [SerializeField] float stamina;
     [Range(0, 10)][SerializeField] float staminaRegen;
-    [Range(1, 2)] [SerializeField] int jumpMax;
     [Range(0, 5)][SerializeField] int jumpStaminaUse;
-    [Range(1, 10)] [SerializeField] int jumpSpeed;
-    [Range(15, 45)] [SerializeField] int gravity;
-    [Range(15, 45)] [SerializeField] int leanAngle;
-    [Range(1, 50)] [SerializeField] int leanSpeed;
     [Range(0, 5)] [SerializeField] float sprintStaminaUse;
+    [Range(0, 5)][SerializeField] float dashStaminaUse;
 
+    [Space, Header("Movement")]
+    [Range(1, 10)][SerializeField] float moveSpeed;
+    [Range(0, 10)][SerializeField] float speedMult;
+
+    [Space, Header("Jumping")]
+    [Range(1, 2)] [SerializeField] int jumpMax;
+    [Range(1, 40)] [SerializeField] int jumpSpeed;
+    
+    [Space, Header("Dashing")]
+    [Range(2, 20)][SerializeField] float dashSpeed;
+    [Range(0, 10)][SerializeField] float dashDuration;
+    [Range(0, 10)][SerializeField] float dashCooldown;
+    
+    [Space, Header("Leaning")]
+    [Range(15, 45)][SerializeField] int leanAngle;
+    [Range(1, 50)][SerializeField] int leanSpeed;
+
+    [Space, Header("Crouch")]
+    [Range(0, 5)][SerializeField] float crouchHeight;
+
+    [Space, Header("Gravity & Checks")]
+    [Range(15, 45)] [SerializeField] int gravity;
     [SerializeField] float groundCheckDistance;
-    [Range(2, 20)] [SerializeField] float dashSpeed;
-    [Range(0, 10)] [SerializeField] float dashDuration;
-    [Range(0, 10)] [SerializeField] float dashCooldown;
-    [Range(0, 5)] [SerializeField] float dashStaminaUse;
-
-    [Range(0, 5)] [SerializeField] float crouchHeight;
-    [Range(1, 10)] [SerializeField] float moveSpeed;
-    [Range(0, 10)] [SerializeField] float speedMult;
-
+    
     [Header("--- Shock Push Settings ---")]
     [Range(1, 20)] [SerializeField] float shockPushRange;
     [Range(1, 10)] [SerializeField] float shockPushStrength;
@@ -53,7 +66,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
     [SerializeField] int shootDamage;
     [SerializeField] int shootDist;
     [SerializeField] private float fireRate;
-    [SerializeField] GameObject gunModel;
+    [SerializeField] Transform gunModel;
 
     int HPOrig;
     float staminaOrig;
@@ -81,6 +94,10 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
     Vector3 dashDir;
 
     Animator anim;
+
+    #endregion
+
+    #region Unity
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -112,6 +129,9 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
         handleLean();
         handleCrouch();
     }
+
+    #endregion
+
     void HandleStaminaRegeneration()
     {
         if (!isSprinting && !isDashing)
@@ -494,6 +514,15 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
 
     void changeWeapon()
     {
+        // Destroy the previous weapon if it exists
+        if (gunModel.childCount > 0)
+        {
+            foreach (Transform child in gunModel)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+
         shootDamage = gunList[gunListPos].shootDamage;
         shootDist = gunList[gunListPos].shootDist;
         fireRate = gunList[gunListPos].shootRate;
@@ -501,8 +530,15 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
         //anim = weapon.animator;
         //GameManager.instance.weaponSprite = weapon.spriteBody;
 
-        gunModel.GetComponent<MeshFilter>().sharedMesh = gunList[gunListPos].weaponModel.GetComponent<MeshFilter>().sharedMesh;
-        gunModel.GetComponent<MeshRenderer>().sharedMaterial = gunList[gunListPos].weaponModel.GetComponent<MeshRenderer>().sharedMaterial;
+        if (gunList[gunListPos].weaponModel != null && gunModel != null)
+        {
+            // Instantiate the prefab
+            GameObject newObject = Instantiate(gunList[gunListPos].weaponModel, gunModel);
+        }
+        else
+        {
+            Debug.LogWarning("Prefab or ParentObject is not assigned!");
+        }
     }
 
 }
