@@ -59,11 +59,11 @@ MonoBehaviour:
   shootRate: 0.25
   faceTargetSpeed: 10
   sightFOV: 90
-  shootFOV: 30
+  shootFOV: 40
   animeSpeedTrans: 8
   roamPauseTime: 3
   roamDistance: 15
-  HP: 60
+  HP: 40
 --- !u!95 &8987095715576498684
 Animator:
   serializedVersion: 7

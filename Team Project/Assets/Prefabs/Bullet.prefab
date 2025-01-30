@@ -50,8 +50,8 @@ MonoBehaviour:
   type: 0
   rb: {fileID: 1472574094043651258}
   damageAmount: 2
-  speed: 25
-  destroyTime: 3
+  speed: 30
+  destroyTime: 2
 --- !u!54 &1472574094043651258
 Rigidbody:
   m_ObjectHideFlags: 0

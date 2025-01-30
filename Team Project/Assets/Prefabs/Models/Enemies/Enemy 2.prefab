@@ -120,13 +120,13 @@ MonoBehaviour:
   headPOS: {fileID: 6892320861003370417}
   bullet: {fileID: 6131050754550736681, guid: 1b4b797db9265024ba42ac6f35a8f4ad, type: 3}
   shootRate: 0.8
-  faceTargetSpeed: 8
+  faceTargetSpeed: 10
   sightFOV: 90
   shootFOV: 30
   animeSpeedTrans: 8
-  roamPauseTime: 3
+  roamPauseTime: 5
   roamDistance: 15
-  HP: 40
+  HP: 20
 --- !u!95 &3327923972409615707
 Animator:
   serializedVersion: 7
