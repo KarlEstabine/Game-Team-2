@@ -203,7 +203,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
 
 
         // Shooting logic
-        if (Input.GetButtonDown("Shoot") && !isShooting)
+        if (Input.GetButton("Shoot") && !isShooting)
         {
             StartCoroutine(shoot());
         }
