@@ -3,6 +3,7 @@ using Unity.Mathematics;
 using UnityEngine.InputSystem;
 using System.Collections;
 using System.Collections.Generic;
+using Random = UnityEngine.Random;
 
 
 public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
@@ -10,6 +11,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
     [Header("--- Components ---")]
     [Space]
     [SerializeField] CharacterController controller;
+    [SerializeField] AudioSource aud;
     [SerializeField] LayerMask ignoreMask;
     [SerializeField] LayerMask groundMask;          // Layers considered "ground"
 
@@ -54,19 +56,28 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
     [SerializeField] int shootDist;
     [SerializeField] private float fireRate;
     [SerializeField] GameObject gunModel;
+    [SerializeField] GameObject muzzleFlash;
+    [Header("--- Audio Settings ---")]
+    [SerializeField] AudioClip[] audSteps;
+    [Range(0, 1)][SerializeField] float audStepsVol;
+
+    [SerializeField] AudioClip[] audHurt;
+    [Range(0, 1)][SerializeField] float audHurtVol;
+    [SerializeField] AudioClip[] audJump;
+    [Range(0, 1)][SerializeField] float audJumpVol;
 
     int HPOrig;
     float staminaOrig;
     int jumpCount;
     int gunListPos;
-
+    float shootTimer;
     float currentLean;
     float originalCameraHeight;
     float originalmoveSpeed;
     float originalControllerHeight;
     float dashTimeLeft;
     float dashCooldownTimer;
-
+    bool isPlayingSteps;
     bool isSprinting;
     bool isLeaningRight;
     bool isLeaningLeft;
@@ -89,7 +100,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
         HPOrig = HP;
         staminaOrig = stamina;
         UpdatePlayerUI();
-
+        shootTimer = fireRate;
         originalCameraHeight = Camera.main.transform.localPosition.y;
         originalmoveSpeed = moveSpeed;
         originalControllerHeight = controller.height;
@@ -99,18 +110,23 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
     void Update()
     {
         Debug.DrawRay(Camera.main.transform.position, Camera.main.transform.forward * shootDist, Color.red);
+        if (!GameManager.instance.isPaused)
+        {
+            selectWeapon();
+            move();
+            HandleStaminaRegeneration();
+            dashInput();
+            shockPushInput();
+            shootTimer += Time.deltaTime;
+            UpdateDashCooldown();
+            handleLean();
+            handleCrouch();
+            sprint();
 
-        HandleStaminaRegeneration();
-        move();
-        sprint();
-        dashInput();
-        shockPushInput();
-        selectWeapon();
-
+        }
+       
         updateAnimator();
-        UpdateDashCooldown();
-        handleLean();
-        handleCrouch();
+      
     }
     void HandleStaminaRegeneration()
     {
@@ -186,7 +202,12 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
         if (controller.isGrounded)
         {
             jumpCount = 0;
-            playerVel.y = 0;
+            playerVel = Vector3.zero;
+            if (!isPlayingSteps && moveDir.magnitude > 0.3f)
+            {
+                StartCoroutine(playSteps());
+
+            }
         }
 
         // Get movement input and normalize direction
@@ -203,10 +224,27 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
 
 
         // Shooting logic
-        if (Input.GetButtonDown("Shoot") && !isShooting)
+        if (Input.GetButton("Shoot") && gunList.Count>0 && shootTimer >= fireRate)
         {
-            StartCoroutine(shoot());
+            shoot();
         }
+    }
+
+    IEnumerator playSteps()
+    {
+        isPlayingSteps = true;
+        aud.PlayOneShot(audSteps[Random.Range(0, audSteps.Length)], audStepsVol);
+        if (!isSprinting)
+        {
+            yield return new WaitForSeconds(0.5f);
+
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.25f);
+        }
+
+        isPlayingSteps = false;
     }
 
     public void staminaUse(float amount)
@@ -249,6 +287,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
         //}
         if (Input.GetButtonDown("Jump") && jumpCount < jumpMax && stamina >= jumpStaminaUse)
         {
+            aud.PlayOneShot(audJump[Random.Range(0, audJump.Length)], audJumpVol);
             stand();
             jumpCount++;
             playerVel.y = jumpSpeed;
@@ -256,28 +295,39 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
         }
     }
 
-    private IEnumerator shoot()
+    void shoot()
     {
-        isShooting = true;
+        shootTimer = 0;
+        aud.PlayOneShot(gunList[gunListPos].shootSound[Random.Range(0, gunList[gunListPos].shootSound.Length)], gunList[gunListPos].shootSoundVol);
+
+        StartCoroutine(flashMulleFire());
         RaycastHit hit;
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, shootDist, ~ignoreMask))
         {
+            Debug.Log(hit.collider.name);
+
+            Instantiate(gunList[gunListPos].hitEffect, hit.point, Quaternion.identity);
+
 
             IDamage dmg = hit.collider.GetComponent<IDamage>();
-            if (dmg != null && !hit.collider.isTrigger)
+            if (dmg != null)
             {
                 dmg.takeDamage(shootDamage);
             }
-
         }
-        yield return new WaitForSeconds(fireRate);
-        isShooting = false;
+    }
+    IEnumerator flashMulleFire()
+    {
+        muzzleFlash.SetActive(true);
+        yield return new WaitForSeconds(0.05f);
+        muzzleFlash.SetActive(false);
     }
 
     public void takeDamage(int amount)
     {
         // update health bar to go down if dmg taken
         HP -= amount;
+        aud.PlayOneShot(audHurt[Random.Range(0, audHurt.Length)], audHurtVol);
         UpdatePlayerUI();
 
         // Flash damage panel

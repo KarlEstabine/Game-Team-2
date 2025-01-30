@@ -10,7 +10,7 @@ public class GunStats : ScriptableObject
     public GameObject weaponModel;
     public int shootDamage;
     public int shootDist;
-    public int ammoCur, ammoMax, totalMags;
+   // public int ammoCur, ammoMax, totalMags;
     public float shootRate;
 
     [Header("--- Effects ---")]
@@ -18,14 +18,14 @@ public class GunStats : ScriptableObject
 
     public ParticleSystem hitEffect;
     public AudioClip[] shootSound;
-    [Range(0, 200)] public float shootSoundVol;
-    [Space]
+    [Range(0, 1)] public float shootSoundVol;
+ //  [Space]
 
-    public AudioClip audioClipHolster;
-    public AudioClip audioClipUnholster;
-    public AudioClip audioClipReload;
-    public AudioClip audioClipReloadEmpty;
-    public AudioClip audioClipFireEmpty;
+   // public AudioClip audioClipHolster;
+   // public AudioClip audioClipUnholster;
+    //public AudioClip audioClipReload;
+   // public AudioClip audioClipReloadEmpty;
+   // public AudioClip audioClipFireEmpty;
     //[Space]
 
     //public Animator animator;

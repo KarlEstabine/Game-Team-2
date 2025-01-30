@@ -5817,7 +5817,7 @@ PrefabInstance:
       objectReference: {fileID: 1824333836746888876}
     - target: {fileID: 8302263837069320823, guid: 3aa60a7f15802d84c8fc4eb04d79a0f2, type: 3}
       propertyPath: isPaused
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8302263837069320823, guid: 3aa60a7f15802d84c8fc4eb04d79a0f2, type: 3}
       propertyPath: menuLose

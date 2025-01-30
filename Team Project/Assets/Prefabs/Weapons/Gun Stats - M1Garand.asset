@@ -19,13 +19,7 @@ MonoBehaviour:
   ammoMax: 10
   totalMags: 0
   shootRate: 1
-  hitEffect: {fileID: 0}
-  shootSound: []
-  shootSoundVol: 0
-  audioClipHolster: {fileID: 0}
-  audioClipUnholster: {fileID: 0}
-  audioClipReload: {fileID: 0}
-  audioClipReloadEmpty: {fileID: 0}
-  audioClipFireEmpty: {fileID: 0}
-  animator: {fileID: 0}
-  spriteBody: {fileID: 0}
+  hitEffect: {fileID: 970440554703164915, guid: 47096eff328e11a418ace7db2d72aa97, type: 3}
+  shootSound:
+  - {fileID: 8300000, guid: 4f270fe4cce59514eb52096b06435a54, type: 3}
+  shootSoundVol: 0.3
