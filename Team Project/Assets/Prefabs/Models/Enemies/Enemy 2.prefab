@@ -124,6 +124,8 @@ MonoBehaviour:
   sightFOV: 90
   shootFOV: 30
   animeSpeedTrans: 8
+  roamPauseTime: 3
+  roamDistance: 15
   HP: 40
 --- !u!95 &3327923972409615707
 Animator:
