@@ -31,7 +31,7 @@ public class EnemyAI : MonoBehaviour, IDamage
     Color colorOrig;
 
     Vector3 playerDir;
-    Vector3 height = new Vector3(0, 1.2f, 0);
+    Vector3 height = new Vector3(0, 1, 0);
     Vector3 startingPosition;
 
     Coroutine co;

@@ -17,22 +17,22 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
     [Header("--- Player Settings ---")]
     [Space]
 
-    [Range(1, 10)] [SerializeField] int HP;
+    [Range(1, 100)] [SerializeField] int HP;
     [Range(1, 100)] [SerializeField] float stamina;
     [Range(0, 10)][SerializeField] float staminaRegen;
     [Range(1, 2)] [SerializeField] int jumpMax;
     [Range(0, 5)][SerializeField] int jumpStaminaUse;
-    [Range(1, 10)] [SerializeField] int jumpSpeed;
+    [Range(1, 50)] [SerializeField] int jumpSpeed;
     [Range(15, 45)] [SerializeField] int gravity;
     [Range(15, 45)] [SerializeField] int leanAngle;
     [Range(1, 50)] [SerializeField] int leanSpeed;
     [Range(0, 5)] [SerializeField] float sprintStaminaUse;
 
     [SerializeField] float groundCheckDistance;
-    [Range(2, 20)] [SerializeField] float dashSpeed;
+    [Range(2, 30)] [SerializeField] float dashSpeed;
     [Range(0, 10)] [SerializeField] float dashDuration;
     [Range(0, 10)] [SerializeField] float dashCooldown;
-    [Range(0, 5)] [SerializeField] float dashStaminaUse;
+    [Range(0, 10)] [SerializeField] float dashStaminaUse;
 
     [Range(0, 5)] [SerializeField] float crouchHeight;
     [Range(1, 10)] [SerializeField] float moveSpeed;
@@ -186,7 +186,7 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
         if (controller.isGrounded)
         {
             jumpCount = 0;
-            playerVel.y = -gravity * Time.deltaTime;
+            playerVel.y = 0;
         }
 
         // Get movement input and normalize direction
@@ -237,15 +237,16 @@ public class PlayerController : MonoBehaviour, IDamage, IPickup, IOpen
 
     void jump()
     {
-        if(controller.isGrounded)
-        {
-            jumpCount = 0;
-            playerVel.y = -gravity * Time.deltaTime;
-        }
-        else
-        {
-            playerVel.y -= gravity * Time.deltaTime;
-        }
+        //already called in move
+        //if(controller.isGrounded)
+        //{
+        //    jumpCount = 0;
+        //    playerVel.y = -gravity * Time.deltaTime;
+        //}
+        //else
+        //{
+        //    playerVel.y -= gravity * Time.deltaTime;
+        //}
         if (Input.GetButtonDown("Jump") && jumpCount < jumpMax && stamina >= jumpStaminaUse)
         {
             stand();
